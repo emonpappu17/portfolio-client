@@ -7,7 +7,6 @@ export default function DashboardLayout({
 }>) {
   return (
     <main>
-      {/* //   <Sidebar /> */}
       {children}
     </main>
   );

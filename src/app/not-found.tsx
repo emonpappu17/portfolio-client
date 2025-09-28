@@ -3,10 +3,9 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-
 export default function NotFoundPage() {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4" >
             <div className="max-w-md text-center">
                 <h1 className="text-6xl font-bold text-gray-800">404</h1>
                 <h2 className="mt-2 text-2xl font-semibold text-gray-700">
