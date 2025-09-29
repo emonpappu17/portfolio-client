@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import { login } from '@/actions/auth'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,42 +21,64 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import z from 'zod'
+
+const loginSchema = z.object({
+    email: z.email("Invalid email"),
+    password: z.string().min(6)
+})
+
+export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const form = useForm<FieldValues>({
+    const form = useForm<LoginFormValues>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: '',
             password: '',
         },
     })
 
-    const onSubmit = async (values: FieldValues) => {
+    const onSubmit = async (values: LoginFormValues) => {
         setLoading(true)
         setError(null)
 
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(values),
-            })
+        console.log(values);
 
-            if (!res.ok) {
-                const { message } = await res.json()
+        try {
+            // const res = await fetch('/api/auth/login', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(values),
+            // })
+
+            const res = await login(values);
+
+            console.log('res from onsumit:', res);
+
+            if (!res.success) {
+                const { message } = await res
+                toast.error(message)
                 throw new Error(message || 'Invalid credentials')
             }
 
-            router.push('/admin/dashboard')
+            toast.success("Admin logged in successfully!")
+
+
+            // router.push('/admin/dashboard')
         } catch (err: any) {
-            setError(err.message)
+            // setError(err.message)
+            console.log(err);
         } finally {
             setLoading(false)
         }
@@ -65,9 +88,11 @@ export default function LoginForm() {
         <section className="px-4 py-16 md:py-32 w-full">
             <Card className="w-[350px] shadow-md bg-card/40">
                 <CardHeader className="text-center">
-                    <Link href="/" aria-label="Go home" className="mx-auto block w-fit">
+                    {/* <Link href="/" aria-label="Go home" className="mx-auto block w-fit">
                         <Logo />
-                    </Link>
+                    </Link> */}
+                    <Logo />
+
                     <CardTitle className="mt-4 text-xl">Admin Login</CardTitle>
                     <CardDescription>
                         Enter your credentials to access the dashboard
@@ -76,12 +101,12 @@ export default function LoginForm() {
 
                 <CardContent>
                     <Separator className="my-4" />
-
+                    {/* 
                     {error && (
                         <p className="mb-4 rounded-md bg-destructive/15 p-2 text-sm text-destructive">
                             {error}
                         </p>
-                    )}
+                    )} */}
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

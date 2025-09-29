@@ -14,6 +14,7 @@ const menuItems = [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blogs" },
     { name: "Project", href: "/projects" },
+    { name: "Dashboard", href: "/dashboard" },
 ]
 
 export const HeroHeader = () => {
@@ -45,13 +46,16 @@ export const HeroHeader = () => {
                     <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
                         {/* Logo + mobile menu button */}
                         <div className="flex w-full justify-between lg:w-auto">
-                            <Link
+                            {/* <Link
                                 href="/"
                                 aria-label="home"
                                 className="flex items-center space-x-2"
                             >
                                 <Logo />
-                            </Link>
+                            </Link> */}
+
+                            <Logo />
+
 
                             <button
                                 onClick={() => setMenuState(!menuState)}
