@@ -12,11 +12,12 @@ import {
 } from "@/components/ui/sidebar"
 import { FileText, FolderKanban, HomeIcon } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Logo } from "./logo"
 import { Separator } from "./ui/separator"
 import { Button } from "./ui/button"
 import { logout } from "@/services/auth/auth"
+import { toast } from "sonner"
 
 const items = [
   {
@@ -38,6 +39,13 @@ const items = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/')
+    toast.success("Logout Successfully!")
+  }
   return (
     <Sidebar {...props} className="">
       <SidebarHeader className="p-4 text-center ">
@@ -58,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarRail />
       <Separator></Separator>
       <SidebarFooter>
-        <Button variant={"destructive"} onClick={() => logout()}>Logout</Button>
+        <Button variant={"destructive"} onClick={handleLogout}>Logout</Button>
       </SidebarFooter>
     </Sidebar>
   )

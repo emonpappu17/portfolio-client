@@ -1,13 +1,12 @@
 "use client"
 
+import { Logo } from "@/components/logo"
+import { cn } from "@/lib/utils"
+import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Logo } from "@/components/logo"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import React from "react"
-import { cn } from "@/lib/utils"
-import { ModeToggle } from "./shared/ModeToggle"
+import { useEffect, useState } from "react"
+import { RightHead } from "./headRightSideSec"
 
 const menuItems = [
     { name: "Home", href: "/" },
@@ -18,11 +17,14 @@ const menuItems = [
 ]
 
 export const HeroHeader = () => {
-    const [menuState, setMenuState] = React.useState(false)
-    const [isScrolled, setIsScrolled] = React.useState(false)
+    const [menuState, setMenuState] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
     const pathname = usePathname()
 
-    React.useEffect(() => {
+    // const profile = getProfile();
+    // console.log('profile==>', profile);
+
+    useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50)
         }
@@ -46,17 +48,7 @@ export const HeroHeader = () => {
                     <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
                         {/* Logo + mobile menu button */}
                         <div className="flex w-full justify-between lg:w-auto">
-                            {/* <Link
-                                href="/"
-                                aria-label="home"
-                                className="flex items-center space-x-2"
-                            >
-                                <Logo />
-                            </Link> */}
-
                             <Logo />
-
-
                             <button
                                 onClick={() => setMenuState(!menuState)}
                                 aria-label={menuState ? "Close Menu" : "Open Menu"}
@@ -123,7 +115,7 @@ export const HeroHeader = () => {
                                 </ul>
                             </div>
 
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                            {/* <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                                 <ModeToggle />
                                 <Button
                                     asChild
@@ -133,7 +125,8 @@ export const HeroHeader = () => {
                                 >
                                     <Link href="/login">Login</Link>
                                 </Button>
-                            </div>
+                            </div> */}
+                            <RightHead isScrolled={isScrolled}></RightHead>
                         </div>
                     </div>
                 </div>
