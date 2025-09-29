@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { login } from '@/actions/auth'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,8 +20,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { login } from '@/services/auth/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -56,15 +55,9 @@ export default function LoginForm() {
         console.log(values);
 
         try {
-            // const res = await fetch('/api/auth/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(values),
-            // })
-
             const res = await login(values);
 
-            console.log('res from onsumit:', res);
+            // console.log('res from onsumit:', res);
 
             if (!res.success) {
                 const { message } = await res
@@ -72,12 +65,10 @@ export default function LoginForm() {
                 throw new Error(message || 'Invalid credentials')
             }
 
-            toast.success("Admin logged in successfully!")
+            router.push("/dashboard")
+            toast.success(`Welcome back ${res?.data?.user?.name}`)
 
-
-            // router.push('/admin/dashboard')
         } catch (err: any) {
-            // setError(err.message)
             console.log(err);
         } finally {
             setLoading(false)
