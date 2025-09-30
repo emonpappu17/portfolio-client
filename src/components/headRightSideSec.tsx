@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import { getProfile } from '@/services/user/profile';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { ModeToggle } from './shared/ModeToggle';
 import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { getProfile } from '@/services/user/profile';
 
 export const RightHead = ({ isScrolled }: { isScrolled: boolean }) => {
     // const profile = await getProfile();
@@ -30,7 +29,7 @@ export const RightHead = ({ isScrolled }: { isScrolled: boolean }) => {
                 <Link href="/login">Login</Link>
             </Button> */}
 
-            {profile ? (
+            {profile?.success ? (
                 <Button asChild variant="outline" size="sm">
                     <Link href="/dashboard">Dashboard</Link>
                 </Button>
