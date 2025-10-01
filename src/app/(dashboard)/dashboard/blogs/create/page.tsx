@@ -1,9 +1,11 @@
-import React from 'react';
+// import BlogForm from "@/components/blog/BlogForm";
+
+import BlogForm from "@/components/blog/BlogForm";
 
 const CreateBlog = () => {
     return (
-        <div>
-            <h1>CreateBlog</h1>
+        <div className="">
+            <BlogForm />
         </div>
     );
 };

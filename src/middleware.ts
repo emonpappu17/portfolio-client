@@ -5,8 +5,8 @@ export const middleware = (request: NextRequest) => {
     if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
         return NextResponse.redirect(new URL("/login", request.url))
     }
-    console.log('token==>', token);
-    console.log('request ===> ', request);
+    // console.log('token==>', token);
+    // console.log('request ===> ', request);
     return NextResponse.next();
 }
 
