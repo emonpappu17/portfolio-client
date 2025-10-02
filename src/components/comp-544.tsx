@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react"
 
-import { useFileUpload } from "@/hooks/use-file-upload"
+import { FileMetadata, useFileUpload } from "@/hooks/use-file-upload"
 import Image from "next/image"
+import { Dispatch, SetStateAction, useEffect } from "react"
 
-export default function Component() {
+export default function ImageUploader({ setImage }: { setImage: Dispatch<SetStateAction<File | FileMetadata | null>> }) {
   const maxSizeMB = 5
   const maxSize = maxSizeMB * 1024 * 1024 // 5MB default
 
@@ -23,9 +26,18 @@ export default function Component() {
   ] = useFileUpload({
     accept: "image/*",
     maxSize,
+    maxFiles: 1
   })
 
   const previewUrl = files[0]?.preview || null
+
+  useEffect(() => {
+    if (files.length > 0) {
+      setImage(files[0].file);
+    } else {
+      setImage(null);
+    }
+  }, [files, setImage]);
 
   return (
     <div className="flex flex-col gap-2">

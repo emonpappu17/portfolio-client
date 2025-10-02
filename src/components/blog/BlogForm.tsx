@@ -1,119 +1,5 @@
-// "use client";
-
-// import { useState } from "react";
-// import dynamic from "next/dynamic";
-// import { Button } from "@/components/ui/button";
-// import {
-//     Form,
-//     FormControl,
-//     FormField,
-//     FormItem,
-//     FormLabel,
-//     FormMessage,
-// } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm, Controller } from "react-hook-form";
-// import z from "zod";
-// import { Card, CardHeader } from "../ui/card";
-// import 'react-quill-new/dist/quill.snow.css';
-// import Component from "../comp-544";
-
-// const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
-// // import "react-quill/dist/quill.snow.css";
-
-// const formSchema = z.object({
-//     title: z.string().min(2, {
-//         message: "Title must be at least 2 characters.",
-//     }),
-//     content: z.string().min(10, {
-//         message: "Content must be at least 10 characters.",
-//     }),
-// });
-
-// type FormValues = z.infer<typeof formSchema>;
-
-// const BlogForm = () => {
-//     const form = useForm<FormValues>({
-//         resolver: zodResolver(formSchema),
-//         defaultValues: {
-//             title: "",
-//             content: "",
-//         },
-//     });
-
-//     const { control, handleSubmit } = form;
-
-//     const onSubmit = (values: FormValues) => {
-//         console.log("Final Values:", values);
-//         // call your server action or mutation here
-//     };
-
-//     return (
-//         <Card className="max-w-4xl mx-auto p-6 bg-card/40 mt-20">
-//             <CardHeader className="text-2xl font-bold mb-6 text-center">
-//                 Create New Blog
-//             </CardHeader>
-//             <Form {...form}>
-//                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-//                     {/* Title */}
-//                     <FormField
-//                         control={form.control}
-//                         name="title"
-//                         render={({ field }) => (
-//                             <FormItem>
-//                                 <FormLabel>Title</FormLabel>
-//                                 <FormControl>
-//                                     <Input placeholder="Enter blog title" {...field} />
-//                                 </FormControl>
-//                                 <FormMessage />
-//                             </FormItem>
-//                         )}
-//                     />
-//                     {/* Thumbnail */}
-
-//                     {/* Content */}
-//                     <Controller
-//                         control={control}
-//                         name="content"
-//                         render={({ field }) => (
-//                             <FormItem className="">
-//                                 <FormLabel>Content</FormLabel>
-//                                 <FormControl>
-//                                     <ReactQuill
-//                                         theme="snow"
-//                                         value={field.value}
-//                                         onChange={field.onChange}
-//                                         // className="bg-white dark:bg-zinc-900"
-//                                         className='h-52 mb-12'
-//                                     />
-//                                 </FormControl>
-//                                 <FormMessage />
-//                             </FormItem>
-//                         )}
-//                     />
-
-//                     {/* Tags */}
-
-//                     <Button type="submit" className="w-full">
-//                         Submit
-//                     </Button>
-//                 </form>
-//             </Form>
-//         </Card>
-//     );
-// };
-
-// export default BlogForm;
-
-
-
-
-
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -124,47 +10,76 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { FileMetadata } from "@/hooks/use-file-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import "react-quill-new/dist/quill.snow.css";
 import z from "zod";
 import { Card, CardHeader } from "../ui/card";
-import "react-quill-new/dist/quill.snow.css";
+import ImageUploader from "../comp-544";
+import { toast } from "sonner";
+import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 /** 1️⃣ Define form schema */
 const formSchema = z.object({
     title: z.string().min(2, { message: "Title must be at least 2 characters." }),
-    content: z.string().min(10, { message: "Content must be at least 10 characters." }),
-    thumbnail: z.string().url({ message: "Thumbnail must be a valid URL." }),
+    content: z.string().min(10, { message: "Content must be at least 50 characters." }),
+    // thumbnail: z.string().url({ message: "Thumbnail must be a valid URL." }),
     tags: z.array(z.string()).min(1, { message: "Add at least 1 tag." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const BlogForm = () => {
+    const [image, setImage] = useState<File | FileMetadata | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     /** 2️⃣ Initialize form */
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
             content: "",
-            thumbnail: "",
+            // thumbnail: "",
             tags: [],
         },
     });
 
-    const { control, handleSubmit } = form;
+    const { control, handleSubmit, } = form;
 
     /** 3️⃣ Submit handler */
-    const onSubmit = (values: FormValues) => {
+    const onSubmit = async (values: FormValues) => {
         console.log("Blog Data:", values);
-        // TODO: Call your backend API or server action here
-        // Example: await createBlog(values);
+        setIsSubmitting(true)
+
+        try {
+            if (!image) return toast.error("Please add thumbnail!");
+
+            const uploadResult = await uploadImageToImgBB(image as File);
+
+            const data = {
+                ...values,
+                thumbnail: uploadResult,
+                authorId: "cmg4k5lvq0000u2j4ziohsyds"
+            }
+
+
+            console.log("final dat==>", data);
+            setIsSubmitting(false)
+            // TODO: Call your backend API or server action here
+            // Example: await createBlog(values);
+        } catch (error) {
+            console.log(error);
+            setIsSubmitting(false)
+        }
     };
 
     return (
-        <Card className="max-w-4xl mx-auto p-6 bg-card/40 mt-20">
+        <Card className="max-w-2xl mx-auto p-6 bg-card mt-10">
             <CardHeader className="text-2xl font-bold mb-6 text-center">
                 Create New Blog
             </CardHeader>
@@ -187,19 +102,10 @@ const BlogForm = () => {
                     />
 
                     {/* Thumbnail */}
-                    <FormField
-                        control={control}
-                        name="thumbnail"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Thumbnail URL</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter image URL" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <div>
+                        <p className="mb-1">Thumbnail</p>
+                        <ImageUploader setImage={setImage}></ImageUploader>
+                    </div>
 
                     {/* Content */}
                     <Controller
@@ -213,7 +119,7 @@ const BlogForm = () => {
                                         theme="snow"
                                         value={field.value}
                                         onChange={field.onChange}
-                                        className="h-52 mb-12"
+                                        className=" mb-12"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -235,9 +141,9 @@ const BlogForm = () => {
                                         onChange={(e) =>
                                             field.onChange(
                                                 e.target.value
+                                                    .toString()
                                                     .split(",")
                                                     .map((tag) => tag.trim())
-                                                    .filter(Boolean)
                                             )
                                         }
                                     />
@@ -247,8 +153,8 @@ const BlogForm = () => {
                         )}
                     />
 
-                    <Button type="submit" className="w-full">
-                        Submit
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? "Submitting..." : "Submit"}
                     </Button>
                 </form>
             </Form>
