@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -11,16 +12,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FileMetadata } from "@/hooks/use-file-upload";
+import { createBlog } from "@/services/blog/blog";
+import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill-new/dist/quill.snow.css";
-import z from "zod";
-import { Card, CardHeader } from "../ui/card";
-import ImageUploader from "../comp-544";
 import { toast } from "sonner";
-import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
+import z from "zod";
+import ImageUploader from "../comp-544";
+import { Card, CardHeader } from "../ui/card";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -37,6 +40,23 @@ type FormValues = z.infer<typeof formSchema>;
 const BlogForm = () => {
     const [image, setImage] = useState<File | FileMetadata | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const queryClient = useQueryClient();
+
+    // API Call
+    const mutation = useMutation({
+        mutationFn: (payload: any) => createBlog(payload),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["blogs"] });
+            // optionally navigate to dashboard list
+            console.log('success!!');
+            toast.success("Blog created successfully!!")
+        },
+        onError: (error: any) => {
+            // console.log('onMutateResult==>', context);
+            console.log("mutation error", error?.response?.data?.message);
+            toast.error(error?.response?.data?.message || "Failed to post a blog")
+        }
+    })
 
     /** 2️⃣ Initialize form */
     const form = useForm<FormValues>({
@@ -44,7 +64,6 @@ const BlogForm = () => {
         defaultValues: {
             title: "",
             content: "",
-            // thumbnail: "",
             tags: [],
         },
     });
@@ -53,7 +72,7 @@ const BlogForm = () => {
 
     /** 3️⃣ Submit handler */
     const onSubmit = async (values: FormValues) => {
-        console.log("Blog Data:", values);
+        // console.log("Blog Data:", values);
         setIsSubmitting(true)
 
         try {
@@ -67,8 +86,8 @@ const BlogForm = () => {
                 authorId: "cmg4k5lvq0000u2j4ziohsyds"
             }
 
-
-            console.log("final dat==>", data);
+            mutation.mutate(data);
+            // console.log("final dat==>", data);
             setIsSubmitting(false)
             // TODO: Call your backend API or server action here
             // Example: await createBlog(values);
@@ -80,7 +99,7 @@ const BlogForm = () => {
 
     return (
         <Card className="max-w-2xl mx-auto p-6 bg-card mt-10">
-            <CardHeader className="text-2xl font-bold mb-6 text-center">
+            <CardHeader className="text-2xl font-bold text-center">
                 Create New Blog
             </CardHeader>
 
@@ -154,7 +173,7 @@ const BlogForm = () => {
                     />
 
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? "Submitting..." : "Submit"}
+                        {isSubmitting ? "Creating..." : "Create"}
                     </Button>
                 </form>
             </Form>
