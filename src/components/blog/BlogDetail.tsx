@@ -16,8 +16,8 @@ export interface Blog {
     authorId: string;
     tags: string[];
     views: number;
-    createdAt: string; 
-    updatedAt: string; 
+    createdAt: string;
+    updatedAt: string;
     author: Author;
 }
 
@@ -36,7 +36,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         .toUpperCase();
 
     return (
-        <article className="mx-auto w-[1000px] px-4 py-10 mt-24 mb-20">
+        <article className="mx-auto max-w-4xl px-4 my-24 sm:px-6 lg:px-8">
             {/* Thumbnail */}
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-md">
                 <Image
@@ -76,9 +76,9 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
             {/* Tags */}
             {blog.tags?.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
-                    {blog.tags.map((tag) => (
+                    {blog.tags.map((tag,i) => (
                         <span
-                            key={tag}
+                            key={i}
                             className="inline-flex items-center rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
                         >
                             #{tag}
