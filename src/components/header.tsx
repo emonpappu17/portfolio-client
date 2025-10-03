@@ -13,16 +13,13 @@ const menuItems = [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blogs" },
     { name: "Project", href: "/projects" },
-    { name: "Dashboard", href: "/dashboard" },
+    // { name: "Dashboard", href: "/dashboard" },
 ]
 
 export const HeroHeader = () => {
     const [menuState, setMenuState] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const pathname = usePathname()
-
-    // const profile = getProfile();
-    // console.log('profile==>', profile);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -114,18 +111,6 @@ export const HeroHeader = () => {
                                     })}
                                 </ul>
                             </div>
-
-                            {/* <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                                <ModeToggle />
-                                <Button
-                                    asChild
-                                    variant="outline"
-                                    size="sm"
-                                    className={cn(isScrolled && "lg:hidden")}
-                                >
-                                    <Link href="/login">Login</Link>
-                                </Button>
-                            </div> */}
                             <RightHead isScrolled={isScrolled}></RightHead>
                         </div>
                     </div>

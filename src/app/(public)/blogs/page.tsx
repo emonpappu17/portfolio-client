@@ -22,7 +22,9 @@ export default async function BlogPage() {
     })
     if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();
-    console.log(data?.data?.data);
+
+    // throw new Error("Test error for error.tsx");
+    // console.log(data?.data?.data);
 
     return (
         <main className="max-w-4xl mx-auto mt-28 mb-20  ">

@@ -1,6 +1,5 @@
 import BlogDetailSkeleton from '@/components/blog/BlogDetailSkeleton';
 
-
 const loading = () => {
     return (
         <BlogDetailSkeleton></BlogDetailSkeleton>
