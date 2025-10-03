@@ -21,6 +21,12 @@ interface BlogCardProps {
 }
 
 export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
+    const initials = blog.author.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
     return (
         <Link
             href={`/blogs/${blog.slug}`}
@@ -35,7 +41,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                         alt={blog.title}
                         fill
                         sizes="(min-width: 1024px) 480px, 100vw"
-                        priority={false}
+                        priority
                         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                     />
                 </div>
@@ -49,7 +55,8 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                     {/* Author avatar (initials) */}
                     <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white shadow-sm ring-1 ring-black/10 dark:ring-white/10">
                         {/* {blog.} */}
-                        E
+                        {initials}
+                        {/* E */}
                     </div>
 
                     <div className="min-w-0">

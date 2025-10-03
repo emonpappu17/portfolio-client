@@ -20,7 +20,7 @@ export default async function BlogPage() {
             revalidate: 60
         }
     })
-
+    if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();
     console.log(data?.data?.data);
 
