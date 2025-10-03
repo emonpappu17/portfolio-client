@@ -217,6 +217,7 @@ import { Card, CardHeader } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { FileMetadata } from "@/hooks/use-file-upload";
 import { Loader2 } from "lucide-react";
+import { revalidateTagFn } from "@/actions/revalidate";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -242,6 +243,8 @@ const BlogForm = () => {
         mutationFn: (payload: any) => createBlog(payload),
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ["blogs"] });
+            await revalidateTagFn("blogs");
+
             router.push("/dashboard/blogs");
             setIsSubmitting(false)
             toast.success("Blog created successfully!");

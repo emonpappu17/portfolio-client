@@ -41,7 +41,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                         alt={blog.title}
                         fill
                         sizes="(min-width: 1024px) 480px, 100vw"
-                        priority
+                        // priority
                         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                     />
                 </div>

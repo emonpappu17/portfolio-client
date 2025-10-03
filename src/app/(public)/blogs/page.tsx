@@ -3,21 +3,12 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { baseUrl } from "@/config/baseUrl";
 
 export default async function BlogPage() {
-    // const fakeBlog = {
-    //     title: "Mastering ISR in Next.js: A Practical Guide",
-    //     content:
-    //         "<p>Incremental Static Regeneration (ISR) allows developers to combine the speed of static generation with the flexibility of server-side rendering. In this guide, we’ll cover when to use ISR, how <strong>revalidate</strong> works, and best practices for production apps...</p>",
-    //     slug: "mastering-isr-nextjs",
-    //     thumbnail:
-    //         "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0",
-    //     tags: ["nextjs", "isr", "performance", "static-generation"],
-    //     author: "Jane Smith",
-    //     date: "2025-09-25",
-    // }
+  
 
     const res = await fetch(`${baseUrl}/blog/all`, {
         next: {
-            revalidate: 60
+            // revalidate: 5,
+            tags: ["blogs"]
         }
     })
     if (!res.ok) throw new Error("Failed to fetch blogs");

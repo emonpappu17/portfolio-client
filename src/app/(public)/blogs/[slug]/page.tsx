@@ -73,7 +73,7 @@ const BlogDetailsPage = async ({
     params: Promise<{ slug: string }>
 }) => {
     const { slug } = await params;
-    const res = await fetch(`${baseUrl}/blog/${slug}`, { next: { revalidate: 60 } })
+    const res = await fetch(`${baseUrl}/blog/${slug}`)
 
     if (!res.ok) return <p>Not found</p>;
     const data = await res.json();

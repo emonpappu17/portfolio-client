@@ -5,7 +5,7 @@ const BlogDetailSkeleton = () => {
     return (
         <article className="mx-auto max-w-4xl md:w-[1000px] sm:w-[500px] px-4 my-24 sm:px-6 lg:px-8">
             {/* Thumbnail */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-md">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
                 <Skeleton className="h-full w-full" />
             </div>
 
