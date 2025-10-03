@@ -29,7 +29,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
         >
             {/* Top media */}
             <div className="relative">
-                <div className="aspect-[16/9] w-full overflow-hidden rounded-t-2xl">
+                <div className="relative  aspect-[16/9] w-full overflow-hidden rounded-t-2xl">
                     <Image
                         src={blog.thumbnail}
                         alt={blog.title}
