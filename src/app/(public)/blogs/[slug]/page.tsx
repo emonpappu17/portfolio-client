@@ -4,7 +4,7 @@ import { baseUrl } from '@/config/baseUrl';
 import { Metadata } from 'next';
 
 export const generateStaticParams = async () => {
-    const res = await fetch(`${baseUrl}/blog/all`, {
+    const res = await fetch(`${baseUrl}/blog`, {
         next: {
             revalidate: 60
         }
