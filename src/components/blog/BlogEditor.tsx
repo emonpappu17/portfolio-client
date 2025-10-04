@@ -1,62 +1,46 @@
-"use client"
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
-import 'react-quill-new/dist/quill.snow.css';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-// Dynamically import ReactQuill so it only runs in the browser
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+import { revalidateTagFn } from "@/actions/revalidate";
+import { getBlogBySlug, updateBlog } from "@/services/blog/blog";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import BlogForm, { BlogFormValues } from "./BlogForm";
 
-const BlogEditor = () => {
-    // const [value, setValue] = useState('');
-    // console.log('quill value=>', value);
+const BlogEditor = ({ slug }: { slug: string }) => {
+    const queryClient = useQueryClient();
 
-    const [value, setValue] = useState('');
-    // const quillRef = useRef<any>(null);
+    // Fetch blog data
+    const { data } = useQuery({
+        queryKey: ["blog", slug],
+        queryFn: () => getBlogBySlug(slug),
+    });
 
-    // const imageHandler = () => {
-    //     const input = document.createElement("input");
-    //     input.setAttribute("type", "file");
-    //     input.setAttribute("accept", "image/*");
-    //     input.click();
-    //     input.onchange = async () => {
-    //         const file = input.files?.[0];
-    //         if (!file) return;
-    //         const { url } = await uploadImage(file);
-    //         const quill = quillRef.current.getEditor();
-    //         const range = quill.getSelection(true);
-    //         quill.insertEmbed(range.index, "image", url);
-    //     };
-    // };
+    console.log(data);
 
-    const modules = {
-        toolbar: {
-            container: [
-                [{ header: [1, 2, 3, false] }],
-                ["bold", "italic", "underline", "strike"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"],
-                ["clean"]
-            ],
-            // handlers: { image: imageHandler }
+    const mutation = useMutation({
+        mutationFn: (payload: any) => updateBlog(slug, payload),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["blogs"] });
+            await revalidateTagFn("blogs");
         }
-    };
+    })
+
+    const handleUpdate = async (values: BlogFormValues & { thumbnail: string }) => {
+        await mutation.mutateAsync(values);
+    }
+
+    if (!data) return <div className="flex min-h-screen items-center justify-center ">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent" />
+    </div>;
+
     return (
         <div>
-            <h1>CreateBlog</h1>
-            <ReactQuill
-                theme="snow"
-                value={value}
-                onChange={setValue}
-            />
-
-            <ReactQuill
-                // ref={quillRef}
-                value={value}
-                onChange={(html) => { setValue(html) }}
-                modules={modules}
-                placeholder='Write something...'
-                className='h-72 mb-12'
-            />
+            <BlogForm
+                initialValues={data.data}
+                onSubmit={handleUpdate}
+                title="Update Blog"
+                submitLabel="Update"
+            ></BlogForm>
         </div>
     );
 };

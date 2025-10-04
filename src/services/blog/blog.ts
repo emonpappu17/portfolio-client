@@ -15,8 +15,13 @@ export const createBlog = async (payload: any) => {
     return res.data;
 }
 
-export const updateBlog = async (id: string, payload: any) => {
-    const res = await api.patch(`/blog/${id}`, payload)
+export const updateBlog = async (slug: string, payload: any) => {
+    const res = await api.patch(`/blog/${slug}`, payload)
+    return res.data;
+}
+
+export const getBlogBySlug = async (slug: string) => {
+    const res = await api.get(`/blog/${slug}`)
     return res.data;
 }
 

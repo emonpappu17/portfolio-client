@@ -241,19 +241,18 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { FileMetadata } from "@/hooks/use-file-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import "react-quill-new/dist/quill.snow.css";
 import { toast } from "sonner";
 import z from "zod";
-import { Card, CardHeader } from "../ui/card";
-import { Loader2, ArrowLeft } from "lucide-react";
 import ImageUploader from "../comp-544";
-import { FileMetadata } from "@/hooks/use-file-upload";
-import { useRouter } from "next/navigation";
-import "react-quill-new/dist/quill.snow.css";
-import Image from "next/image";
+import { Card, CardHeader } from "../ui/card";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -343,6 +342,8 @@ const BlogForm = ({
         ],
     };
 
+    // console.log(' initialValues?.thumbnail==>', initialValues?.thumbnail);
+
     return (
         <Card className="max-w-2xl mx-auto p-6 bg-card mt-10 space-y-6">
             <CardHeader className="text-2xl font-bold text-center">{title}</CardHeader>
@@ -380,20 +381,20 @@ const BlogForm = ({
                     {/* Thumbnail */}
                     <div>
                         <p className="mb-1 font-medium">Thumbnail</p>
-                        <ImageUploader setImage={setImage} />
-                        {initialValues?.thumbnail && !image && (
-                            <Image
-                                src={initialValues.thumbnail}
-                                alt="Current thumbnail"
-                                className="mt-2 h-24 rounded border object-cover"
-                                fill
-                            />
+                        <ImageUploader setImage={setImage} defaultImage={initialValues?.thumbnail} />
+                        {/* {initialValues?.thumbnail && !image && (
+                            // <Image
+                            //     src={initialValues.thumbnail}
+                            //     alt="Current thumbnail"
+                            //     className="mt-2 h-24 rounded border object-cover"
+                            //     fill
+                            // />
                             // <img
                             //     src={initialValues.thumbnail}
                             //     alt="Current thumbnail"
                             //     className="mt-2 h-24 rounded border object-cover"
                             // />
-                        )}
+                        )} */}
                     </div>
 
                     {/* Content */}

@@ -175,7 +175,7 @@ const BlogList = () => {
                                     <Eye className="h-4 w-4" />
                                 </Button>
                             </Link>
-                            <Link href={`/dashboard/blogs/${blog.id}/edit`}>
+                            <Link href={`/dashboard/blogs/${blog.slug}`}>
                                 <Button variant="outline" size="sm">
                                     <Edit className="h-4 w-4" />
                                 </Button>

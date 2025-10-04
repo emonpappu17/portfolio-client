@@ -6,10 +6,12 @@ import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react"
 
 import { FileMetadata, useFileUpload } from "@/hooks/use-file-upload"
 import Image from "next/image"
-import { Dispatch, SetStateAction, useEffect } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { set } from "zod"
 
-export default function ImageUploader({ setImage }: { setImage: Dispatch<SetStateAction<File | FileMetadata | null>> }) {
-  const maxSizeMB = 5
+export default function ImageUploader({ setImage, defaultImage = null }: { setImage: Dispatch<SetStateAction<File | FileMetadata | null>>, defaultImage?: string | null }) {
+  const [previewDefault, setPreviewDefault] = useState(defaultImage);
+  const maxSizeMB = 3
   const maxSize = maxSizeMB * 1024 * 1024 // 5MB default
 
   const [
@@ -28,8 +30,11 @@ export default function ImageUploader({ setImage }: { setImage: Dispatch<SetStat
     maxSize,
     maxFiles: 1
   })
+console.log(defaultImage);
+  const previewUrl = files[0]?.preview || previewDefault
 
-  const previewUrl = files[0]?.preview || null
+  // const previewUrl = files[0]?.preview || "https://i.ibb.co/bjFR7798/1756965686447.jpg"
+  // const previewUrl = files[0]?.preview || null
 
   useEffect(() => {
     if (files.length > 0) {
@@ -89,7 +94,11 @@ export default function ImageUploader({ setImage }: { setImage: Dispatch<SetStat
             <button
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={() => {
+                removeFile(files[0]?.id);
+                // defaultImage = null;
+                setPreviewDefault(null);
+              }}
               aria-label="Remove image"
             >
               <XIcon className="size-4" aria-hidden="true" />
