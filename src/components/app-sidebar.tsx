@@ -44,13 +44,13 @@ const data = {
       icon: FileText,
       items: [
         {
-          title: "Blogs",
+          title: "Blog List",
           url: "/dashboard/blogs",
         },
-        {
-          title: "Create",
-          url: "/dashboard/blogs/create",
-        },
+        // {
+        //   title: "Create",
+        //   url: "/dashboard/blogs/create",
+        // },
       ],
     },
     {
@@ -59,13 +59,13 @@ const data = {
       icon: FolderKanban,
       items: [
         {
-          title: "Projects",
+          title: "Project List",
           url: "/dashboard/projects",
         },
-        {
-          title: "Create",
-          url: "/dashboard/projects/create",
-        },
+        // {
+        //   title: "Create",
+        //   url: "/dashboard/projects/create",
+        // },
       ],
     },
   ],

@@ -25,7 +25,7 @@ import ImageUploader from "../comp-544";
 import { Card, CardHeader } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { FileMetadata } from "@/hooks/use-file-upload";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { revalidateTagFn } from "@/actions/revalidate";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -55,11 +55,11 @@ const BlogForm = () => {
             await revalidateTagFn("blogs");
 
             router.push("/dashboard/blogs");
-            setIsSubmitting(false)
+            setIsSubmitting(false);
             toast.success("Blog created successfully!");
         },
         onError: (error: any) => {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
             toast.error(error?.response?.data?.message || "Failed to post blog");
         },
     });
@@ -78,17 +78,17 @@ const BlogForm = () => {
 
     /** 3️⃣ Submit handler */
     const onSubmit = async (values: FormValues) => {
-        setIsSubmitting(true)
+        setIsSubmitting(true);
         try {
             if (!image) {
-                setIsSubmitting(false)
+                setIsSubmitting(false);
                 return toast.error("Please add a thumbnail!");
             }
 
             // Strip HTML for validation (content should be >= 50 chars text)
             const plainText = values.content.replace(/<[^>]+>/g, "").trim();
             if (plainText.length < 50) {
-                setIsSubmitting(false)
+                setIsSubmitting(false);
                 return toast.error("Content must be at least 50 characters.");
             }
 
@@ -106,29 +106,40 @@ const BlogForm = () => {
             mutation.mutate(data);
         } catch (error) {
             console.error(error);
-            setIsSubmitting(false)
+            setIsSubmitting(false);
             toast.error("Something went wrong while creating blog");
         }
     };
 
-
     const modules = {
         toolbar: [
             [{ header: [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['blockquote', 'code-block'],
-            ['link', 'image'],
-            ['clean'],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["blockquote", "code-block"],
+            ["link", "image"],
+            ["clean"],
         ],
     };
 
-
     return (
-        <Card className="max-w-2xl mx-auto p-6 bg-card mt-10">
+        <Card className="max-w-2xl mx-auto p-6 bg-card mt-10 space-y-6">
             <CardHeader className="text-2xl font-bold text-center">
                 Create New Blog
             </CardHeader>
+
+            {/* Back Button */}
+            <div className="flex justify-start">
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                </Button>
+            </div>
 
             <Form {...form}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -214,5 +225,6 @@ const BlogForm = () => {
 };
 
 export default BlogForm;
+
 
 
