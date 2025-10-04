@@ -1,6 +1,6 @@
 "use client"
 import dynamic from 'next/dynamic';
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import 'react-quill-new/dist/quill.snow.css';
 
 // Dynamically import ReactQuill so it only runs in the browser
@@ -11,7 +11,7 @@ const BlogEditor = () => {
     // console.log('quill value=>', value);
 
     const [value, setValue] = useState('');
-    const quillRef = useRef<any>(null);
+    // const quillRef = useRef<any>(null);
 
     // const imageHandler = () => {
     //     const input = document.createElement("input");

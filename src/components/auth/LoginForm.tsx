@@ -38,7 +38,6 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 export default function LoginForm() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
 
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -50,9 +49,8 @@ export default function LoginForm() {
 
     const onSubmit = async (values: LoginFormValues) => {
         setLoading(true)
-        setError(null)
 
-        console.log(values);
+        // console.log(values);
 
         try {
             const res = await login(values);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 

@@ -3,11 +3,8 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { baseUrl } from "@/config/baseUrl";
 
 export default async function BlogPage() {
-  
-
     const res = await fetch(`${baseUrl}/blog/all`, {
         next: {
-            // revalidate: 5,
             tags: ["blogs"]
         }
     })
