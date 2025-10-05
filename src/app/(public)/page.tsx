@@ -31,7 +31,7 @@ export default function HeroSection() {
   return (
     <div className="relative ">
       {/* Hero Section */}
-      <section className="max-w-4xl mx-auto px-4 py-24 md:py-36 relative z-10">
+      <section className=" max-w-6xl mx-auto px-4 py-24 md:py-32 relative z-10">
         <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -176,7 +176,7 @@ export default function HeroSection() {
 
 
       {/* Tech Stack Section */}
-      <section className="max-w-6xl mx-auto px-6 py-24">
+      <section className="max-w-6xl mx-auto px-6 py-20 ">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

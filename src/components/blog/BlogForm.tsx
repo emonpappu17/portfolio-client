@@ -337,10 +337,11 @@ const BlogForm = ({
             ["bold", "italic", "underline", "strike"],
             [{ list: "ordered" }, { list: "bullet" }],
             ["blockquote", "code-block"],
-            ["link", "image"],
+            ["link"],
             ["clean"],
         ],
     };
+
 
     // console.log(' initialValues?.thumbnail==>', initialValues?.thumbnail);
 
