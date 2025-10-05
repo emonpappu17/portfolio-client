@@ -254,3 +254,58 @@
   white-space: pre;
 }
 
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Table header */
+.prose thead {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.prose th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+/* Table body */
+.prose td {
+  width: 100%;
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+/* Zebra striping for readability */
+.prose tbody tr:nth-child(odd) {
+  background-color: var(--card);
+}
+
+.prose tbody tr:nth-child(even) {
+  background-color: var(--muted);
+}
+
+/* Hover effect */
+.prose tbody tr:hover {
+  background-color: color-mix(in oklch, var(--accent) 20%, transparent);
+}
+
+/* Responsive: allow horizontal scroll on small screens */
+.prose table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
