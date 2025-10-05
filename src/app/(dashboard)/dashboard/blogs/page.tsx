@@ -10,22 +10,24 @@ import {
 
 const DashboardBlogsPage = async () => {
     return (
-        <main className="max-w-7xl mx-auto px-4 py-10 space-y-8">
+        <main >
             {/* Page Header */}
-            <Card className=" min-w-[310px]">
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="text-2xl font-bold">Manage Blogs</CardTitle>
-                    <Link href="/dashboard/blogs/create">
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Create Blog
-                        </Button>
-                    </Link>
-                </CardHeader>
-            </Card>
+            <div className="max-w-7xl mx-auto px-4 py-10 space-y-8">
+                <Card >
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle className="text-2xl font-bold">Manage Blogs</CardTitle>
+                        <Link href="/dashboard/blogs/create">
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Create Blog
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                </Card>
 
-            {/* Blog List */}
-            <BlogList />
+                {/* Blog List */}
+                <BlogList />
+            </div>
         </main>
     );
 };

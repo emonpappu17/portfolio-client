@@ -30,7 +30,7 @@ export default function ImageUploader({ setImage, defaultImage = null }: { setIm
     maxSize,
     maxFiles: 1
   })
-console.log(defaultImage);
+// console.log(defaultImage);
   const previewUrl = files[0]?.preview || previewDefault
 
   // const previewUrl = files[0]?.preview || "https://i.ibb.co/bjFR7798/1756965686447.jpg"
