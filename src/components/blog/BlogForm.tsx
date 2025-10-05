@@ -115,7 +115,7 @@ const BlogForm = ({
     // console.log(' initialValues?.thumbnail==>', initialValues?.thumbnail);
 
     return (
-        <Card className="max-w-2xl mx-auto p-6 bg-card mt-10 space-y-6">
+        <Card className="max-w-3xl mx-auto p-6 bg-card mt-10 space-y-6">
             <CardHeader className="text-2xl font-bold text-center">{title}</CardHeader>
 
             {/* Back Button */}
