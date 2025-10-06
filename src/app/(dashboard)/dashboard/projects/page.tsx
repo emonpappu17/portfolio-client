@@ -42,7 +42,7 @@ const DashboardProjectsPage = async () => {
                         <CardTitle className="text-2xl font-bold">Manage Projects</CardTitle>
                         <Link href="/dashboard/projects/create">
                             <Button>
-                                <Plus className="mr-2 h-4 w-4" />
+                                <Plus />
                                 Create Project
                             </Button>
                         </Link>

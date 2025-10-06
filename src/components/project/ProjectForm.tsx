@@ -66,10 +66,20 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     });
 
     const handleFormSubmit = async (values: ProjectInput) => {
-        if (!image) return toast.error("Thumbnail missing");
+        // if (!image) return toast.error("Thumbnail missing");
         setIsSubmitting(true)
         try {
-            const thumbnail = await uploadImageToImgBB(image as File);
+            let thumbnail = project?.thumbnail || "";
+
+            if (image) {
+                thumbnail = await uploadImageToImgBB(image as File);
+            }
+
+            if (!thumbnail) {
+                setIsSubmitting(false)
+                return toast.error("Thumbnail missing")
+            }
+
             const finalData = {
                 ...values,
                 thumbnail,
@@ -157,7 +167,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                     {/* Thumbnail */}
                     <div>
                         <p className="mb-1 font-medium">Thumbnail</p>
-                        <ImageUploader setImage={setImage} />
+                        <ImageUploader setImage={setImage} defaultImage={project?.thumbnail} />
                     </div>
 
                     {/* Features */}

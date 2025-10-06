@@ -7,7 +7,6 @@ import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react"
 import { FileMetadata, useFileUpload } from "@/hooks/use-file-upload"
 import Image from "next/image"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { set } from "zod"
 
 export default function ImageUploader({ setImage, defaultImage = null }: { setImage: Dispatch<SetStateAction<File | FileMetadata | null>>, defaultImage?: string | null }) {
   const [previewDefault, setPreviewDefault] = useState(defaultImage);
