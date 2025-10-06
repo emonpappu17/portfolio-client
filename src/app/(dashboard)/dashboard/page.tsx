@@ -1,9 +1,10 @@
+import { cookies } from "next/headers";
 
 const DashboardHomePage = async () => {
     // const cookieStore = await cookies();
     // const accessToken = cookieStore.get("accessToken");
 
-    // console.log(accessToken);
+    // console.log(accessToken?.value);
     return (
         // <SidebarProvider>
         //     <AppSidebar />

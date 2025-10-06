@@ -25,6 +25,9 @@ import { toast } from "sonner";
 import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
 import { useMutation } from "@tanstack/react-query";
 import { createProject } from "@/services/project/project";
+import { Spinner } from "../ui/spinner";
+import { IProject } from "@/types";
+import { createProjectAction } from "@/actions/projectActions";
 
 // Schema for Project
 export const projectSchema = z.object({
@@ -39,21 +42,26 @@ export const projectSchema = z.object({
 
 export type ProjectInput = z.infer<typeof projectSchema>;
 
-const ProjectForm = () => {
+type ProjectFormProps = {
+    project?: IProject;
+};
+
+const ProjectForm = ({ project }: ProjectFormProps) => {
     const [image, setImage] = useState<File | FileMetadata | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const isEditMode = !!project;
     const router = useRouter();
 
     const form = useForm<ProjectInput>({
         resolver: zodResolver(projectSchema),
         defaultValues: {
-            title: "",
-            description: "",
-            features: "",
-            technologies: "",
-            live_link: "",
-            githubClient: "",
-            githubBackend: "",
+            title: project?.title || "",
+            description: project?.description || "",
+            features: project?.features.join(", ") || "",
+            technologies: project?.technologies.join(", ") || "",
+            live_link: project?.live_link || "",
+            githubClient: project?.githubClient || "",
+            githubBackend: project?.githubBackend || "",
         },
     });
 
@@ -97,7 +105,9 @@ const ProjectForm = () => {
                     .filter(Boolean),
             };
 
-            mutation.mutate(finalData);
+            // mutation.mutate(finalData);
+            const res = await createProjectAction(finalData as any)
+            console.log('create res==>', res);
         } catch (err) {
             console.error(err);
             toast.error("Failed to create project");
@@ -247,7 +257,8 @@ const ProjectForm = () => {
                     {/* Submit */}
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
                         {isSubmitting ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            // <Loader2 className="h-5 w-5 animate-spin" />
+                            <Spinner />
                         ) : (
                             "Create Project"
                         )}
