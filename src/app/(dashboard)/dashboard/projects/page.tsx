@@ -4,8 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { baseUrl } from '@/config/baseUrl';
 import { IProject } from '@/types';
-import { Plus } from 'lucide-react';
+import { FolderClosedIcon, Plus } from 'lucide-react';
 import Link from 'next/link';
+
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
 
 const getAllProject = async () => {
     try {
@@ -39,7 +48,29 @@ const DashboardProjectsPage = async () => {
                         </Link>
                     </CardHeader>
                 </Card>
-                <ProjectList projects={projects}></ProjectList>
+                {
+                    projects.length === 0
+                        ? <Card>
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <FolderClosedIcon />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No Projects Yet</EmptyTitle>
+                                    <EmptyDescription>
+                                        You haven&apos;t created any projects yet. Get started by creating
+                                        your first project.
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    <Link href={'/dashboard/projects/create'}>
+                                        <Button>Create Project</Button>
+                                    </Link>
+                                </EmptyContent>
+                            </Empty>
+                        </Card>
+                        : <ProjectList projects={projects} />
+                }
             </div>
         </main>
     );
