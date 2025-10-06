@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
-import { Card, CardHeader } from "../ui/card";
-import { Button } from "../ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import React, { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Form,
     FormControl,
@@ -13,24 +14,22 @@ import {
     FormLabel,
     FormMessage,
 } from "../ui/form";
+import { Card, CardHeader } from "../ui/card";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import ImageUploader from "../comp-544";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { FileMetadata } from "@/hooks/use-file-upload";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
-import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
-import { useMutation } from "@tanstack/react-query";
-import { createProject } from "@/services/project/project";
-import { Spinner } from "../ui/spinner";
-import { IProject } from "@/types";
-import { createProjectAction } from "@/actions/projectActions";
 
-// Schema for Project
-export const projectSchema = z.object({
+import { Spinner } from "../ui/spinner";
+import ImageUploader from "../comp-544";
+import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
+import { createProjectAction } from "@/actions/projectActions";
+import { IProject } from "@/types";
+import { FileMetadata } from "@/hooks/use-file-upload";
+
+// ✅ Schema
+const projectSchema = z.object({
     title: z.string().min(2, "Title must be at least 2 characters"),
     description: z.string().min(10, "Description must be at least 10 characters"),
     features: z.string().min(1, "Provide at least one feature"),
@@ -47,10 +46,11 @@ type ProjectFormProps = {
 };
 
 const ProjectForm = ({ project }: ProjectFormProps) => {
+    const router = useRouter();
     const [image, setImage] = useState<File | FileMetadata | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const isEditMode = !!project;
-    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const isEditMode = Boolean(project);
 
     const form = useForm<ProjectInput>({
         resolver: zodResolver(projectSchema),
@@ -65,59 +65,42 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
         },
     });
 
-    const { control, handleSubmit, reset } = form;
-
-    const mutation = useMutation({
-        mutationFn: (payload: any) => createProject(payload),
-        onSuccess: () => {
-            toast.success("Project created successfully!");
-            reset();
-            router.push("/dashboard/projects");
-        },
-        onError: (error: any) => {
-            console.error("Mutation error:", error);
-            toast.error("Failed to create project");
-        },
-    });
-
     const handleFormSubmit = async (values: ProjectInput) => {
-        if (!image) {
-            return toast.error("Thumbnail missing");
-        }
-
+        if (!image) return toast.error("Thumbnail missing");
+        setIsSubmitting(true)
         try {
-            setIsSubmitting(true);
-
-            // Upload thumbnail
             const thumbnail = await uploadImageToImgBB(image as File);
-
-            // Prepare final payload
             const finalData = {
                 ...values,
                 thumbnail,
-                features: values.features
-                    .split(",")
-                    .map((f) => f.trim())
-                    .filter(Boolean),
-                technologies: values.technologies
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean),
+                features: values.features.split(",").map((f) => f.trim()),
+                technologies: values.technologies.split(",").map((t) => t.trim()),
             };
 
-            // mutation.mutate(finalData);
-            const res = await createProjectAction(finalData as any)
-            console.log('create res==>', res);
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to create project");
-            setIsSubmitting(false);
+            startTransition(async () => {
+                const res = await createProjectAction(finalData as any);
+                if (res?.success) {
+                    toast.success("Project created successfully!");
+                    form.reset();
+                    setIsSubmitting(false)
+                    router.push("/dashboard/projects");
+                } else {
+                    setIsSubmitting(false)
+                    toast.error(res?.message || "Failed to create project");
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            setIsSubmitting(false)
+            toast.error("Something went wrong while creating the project");
         }
     };
 
     return (
-        <Card className="max-w-3xl mx-auto p-6 bg-card mt-10 space-y-6 shadow-lg rounded-xl">
-            <CardHeader className="text-2xl font-bold text-center">Create Project</CardHeader>
+        <Card className="max-w-3xl mx-auto p-6 mt-10 space-y-6 bg-card shadow-lg rounded-xl">
+            <CardHeader className="text-2xl font-bold text-center">
+                {isEditMode ? "Edit Project" : "Create Project"}
+            </CardHeader>
 
             {/* Back Button */}
             <div className="flex justify-start">
@@ -125,7 +108,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                     type="button"
                     variant="outline"
                     onClick={() => router.back()}
-                    className="flex items-center gap-2"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back
@@ -133,10 +115,14 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             </div>
 
             <Form {...form}>
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6" noValidate>
+                <form
+                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    className="space-y-6"
+                    noValidate
+                >
                     {/* Title */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="title"
                         render={({ field }) => (
                             <FormItem>
@@ -151,13 +137,17 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 
                     {/* Description */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="description"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Textarea placeholder="Briefly describe the project" rows={4} {...field} />
+                                    <Textarea
+                                        placeholder="Briefly describe the project"
+                                        rows={4}
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -172,13 +162,16 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 
                     {/* Features */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="features"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Features (comma separated)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="e.g. Authentication, Dashboard, Payments" {...field} />
+                                    <Input
+                                        placeholder="e.g. Authentication, Dashboard, Payments"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -187,38 +180,44 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 
                     {/* Technologies */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="technologies"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Technologies (comma separated)</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="e.g. Next.js, Prisma, Tailwind CSS" {...field} />
+                                    <Input
+                                        placeholder="e.g. Next.js, Prisma, Tailwind CSS"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
 
-                    {/* Live Link */}
+                    {/* Links */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="live_link"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Live Link</FormLabel>
                                 <FormControl>
-                                    <Input type="url" placeholder="https://yourproject.vercel.app" {...field} />
+                                    <Input
+                                        type="url"
+                                        placeholder="https://yourproject.vercel.app"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
 
-                    {/* GitHub Links */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
-                            control={control}
+                            control={form.control}
                             name="githubClient"
                             render={({ field }) => (
                                 <FormItem>
@@ -234,9 +233,8 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                 </FormItem>
                             )}
                         />
-
                         <FormField
-                            control={control}
+                            control={form.control}
                             name="githubBackend"
                             render={({ field }) => (
                                 <FormItem>
@@ -255,13 +253,8 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                     </div>
 
                     {/* Submit */}
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? (
-                            // <Loader2 className="h-5 w-5 animate-spin" />
-                            <Spinner />
-                        ) : (
-                            "Create Project"
-                        )}
+                    <Button type="submit" className="w-full" disabled={isPending || isSubmitting}>
+                        {isPending || isSubmitting ? <Spinner /> : isEditMode ? "Update Project" : "Create Project"}
                     </Button>
                 </form>
             </Form>
@@ -270,5 +263,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 };
 
 export default ProjectForm;
+
 
 
