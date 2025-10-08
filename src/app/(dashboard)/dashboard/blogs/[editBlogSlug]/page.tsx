@@ -7,7 +7,7 @@ const EditBlogPage = async ({
     params: Promise<{ editBlogSlug: string }>
 }) => {
     const { editBlogSlug } = await params;
-    console.log('editBlogSlug==>', editBlogSlug);
+    // console.log('editBlogSlug==>', editBlogSlug);
     return (
         <div>
             {/* <BlogForm></BlogForm> */}
