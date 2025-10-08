@@ -11,3 +11,21 @@ export interface IProject {
     createdAt: string;
     updatedAt: string;
 }
+
+
+export interface About {
+    id: string;
+    fullName: string;
+    title: string;
+    bio: string;
+    image: string;
+    skills: string[];
+    whatILove?: string;
+    email: string;
+    phone: string;
+    location: string;
+    github: string;
+    linkedin: string;
+    createdAt: string;
+    updatedAt: string;
+}
