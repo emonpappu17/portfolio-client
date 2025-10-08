@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Github, Linkedin } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
+import { IAbout } from "@/types";
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -11,9 +12,9 @@ const fadeInUp = {
     transition: { duration: 0.6, ease: "easeOut" },
 };
 
-const About = () => {
+const About = ({ about }: { about: IAbout }) => {
     return (
-        <section id="about" className="py-24 relative overflow-hidden">
+        <section id="about" className="py-14 relative overflow-hidden">
             {/* Section Heading */}
             <motion.div
                 className="text-center mb-16 p-4"
@@ -41,51 +42,64 @@ const About = () => {
                 >
                     <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-primary/20 shadow-lg">
                         <Image
-                            src="https://i.ibb.co.com/wNWNGVz1/1737897219247.jpg"
-                            alt="Emon Howlader"
+                            src={about.image}
+                            alt={about.fullName}
                             fill
                             className="object-cover"
                         />
                     </div>
 
                     <h2 className="mt-6 text-2xl font-semibold tracking-tight text-foreground">
-                        Emon Howlader
+                        {about.fullName}
                     </h2>
-                    <p className="text-primary font-medium">Full-Stack Web Developer</p>
+                    <p className="text-primary font-medium">
+                        {about.title}
+                    </p>
 
                     <div className="mt-6 space-y-2 text-sm text-muted-foreground">
                         <p className="flex items-center justify-center gap-2">
-                            <Mail className="h-4 w-4 text-primary" /> emonbafsd@gmail.com
+                            <Mail className="h-4 w-4 text-primary" />
+                            {about.email}
                         </p>
                         <p className="flex items-center justify-center gap-2">
-                            <Phone className="h-4 w-4 text-primary" /> +880 1648-383606
+                            <Phone className="h-4 w-4 text-primary" />
+                            {about.phone}
                         </p>
                         <p className="flex items-center justify-center gap-2">
-                            <MapPin className="h-4 w-4 text-primary" /> Dhaka, Bangladesh
+                            <MapPin className="h-4 w-4 text-primary" />
+                            {about.location}
                         </p>
                     </div>
 
                     <div className="mt-6 flex gap-4">
-                        {[
-                            { icon: Github, href: "https://github.com/emonhowlader" },
-                            { icon: Linkedin, href: "https://linkedin.com/in/emonhowlader" },
-                        ].map(({ icon: Icon, href }, idx) => (
-                            <motion.a
-                                key={idx}
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.1 }}
-                                transition={{ type: "spring", stiffness: 300 }}
+                        <motion.a
+                            href={about.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <Badge
+                                variant="outline"
+                                className="p-2 rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
                             >
-                                <Badge
-                                    variant="outline"
-                                    className="p-2 rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
-                                >
-                                    <Icon className="h-5 w-5 text-foreground" />
-                                </Badge>
-                            </motion.a>
-                        ))}
+                                <Github className="h-5 w-5 text-foreground" />
+                            </Badge>
+                        </motion.a>
+                        <motion.a
+                            href={about.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <Badge
+                                variant="outline"
+                                className="p-2 rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
+                            >
+                                <Linkedin className="h-5 w-5 text-foreground" />
+                            </Badge>
+                        </motion.a>
                     </div>
                 </motion.div>
 
@@ -101,10 +115,7 @@ const About = () => {
                         Who I Am
                     </h3>
                     <p className="mt-4 text-muted-foreground leading-relaxed">
-                        I’m a passionate full-stack developer who loves crafting digital
-                        products that are both functional and delightful. I specialize in
-                        building scalable and performant web applications using modern
-                        technologies like React, Next.js, Node.js, and Tailwind CSS.
+                        {about.bio}
                     </p>
 
                     {/* Education */}
@@ -134,7 +145,7 @@ const About = () => {
                                     BAF Shaheen College, Dhaka <br />
                                     GPA: 4.33 / 5.00 <br />
                                     <span className="text-sm text-muted-foreground">
-                                        Completed: 2024
+                                        Completed: 2023
                                     </span>
                                 </p>
                             </div>
@@ -145,9 +156,9 @@ const About = () => {
                                 </p>
                                 <p>
                                     BAF Shaheen College, Dhaka <br />
-                                    GPA: 4.44 / 5.00 <br />
+                                    GPA: 4.39 / 5.00 <br />
                                     <span className="text-sm text-muted-foreground">
-                                        Completed: 2022
+                                        Completed: 2021
                                     </span>
                                 </p>
                             </div>
@@ -160,26 +171,7 @@ const About = () => {
                             Skills
                         </h3>
                         <div className="mt-4 flex flex-wrap gap-2">
-                            {[
-                                "TypeScript",
-                                "JavaScript",
-                                "React",
-                                "Next.js",
-                                "Tailwind CSS",
-                                "Node.js",
-                                "Express",
-                                "MongoDB",
-                                "PostgreSQL",
-                                "Prisma",
-                                "Mongoose",
-                                "Redux",
-                                "Firebase",
-                                "Docker",
-                                "Git",
-                                "GitHub",
-                                "Shadcn UI",
-                                "Figma",
-                            ].map((skill, i) => (
+                            {about.skills.map((skill, i) => (
                                 <Badge key={i} variant="secondary" className="text-sm">
                                     {skill}
                                 </Badge>
@@ -188,17 +180,16 @@ const About = () => {
                     </div>
 
                     {/* Passion Section */}
-                    {/* <div className="mt-8">
-                        <h3 className="text-xl font-semibold tracking-tight text-foreground">
-                            What I Love to Build
-                        </h3>
-                        <p className="mt-2 text-muted-foreground leading-relaxed">
-                            I love building responsive web apps, dashboards, and portfolios
-                            that combine clean UI design with smooth UX. My goal is to deliver
-                            modern, performant, and pixel-perfect digital experiences that
-                            leave a lasting impact.
-                        </p>
-                    </div> */}
+                    {
+                        about.whatILove && <div className="mt-8">
+                            <h3 className="text-xl font-semibold tracking-tight text-foreground">
+                                What I Love to Build
+                            </h3>
+                            <p className="mt-2 text-muted-foreground leading-relaxed">
+                                {about.whatILove}
+                            </p>
+                        </div>
+                    }
                 </motion.div>
             </div>
         </section>

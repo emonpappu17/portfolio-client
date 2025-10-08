@@ -39,7 +39,7 @@ const Hero = () => {
 
     return (
         <section className="relative overflow-hidden">
-            <div className="relative py-20">
+            <div className="relative py-20 md:py-28">
                 <div className="mx-auto max-w-7xl px-6 md:px-12">
                     {/* Section 1 */}
                     <motion.div

@@ -13,7 +13,7 @@ export interface IProject {
 }
 
 
-export interface About {
+export interface IAbout {
     id: string;
     fullName: string;
     title: string;

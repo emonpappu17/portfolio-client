@@ -1,12 +1,21 @@
 import About from '@/components/home/About';
 import Hero from '@/components/home/Hero';
+import { baseUrl } from '@/config/baseUrl';
+import { IAbout } from '@/types';
 import React from 'react';
 
-const HomePage = () => {
+const HomePage = async () => {
+  const res = await fetch(`${baseUrl}/about`, {
+    cache: "force-cache"
+  })
+  const data = await res.json();
+  const about = data?.data as IAbout
+  // console.log(about);
+
   return (
     <main>
       <Hero></Hero>
-      <About></About>
+      <About about={about}></About>
     </main>
   );
 };
