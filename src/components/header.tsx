@@ -11,7 +11,8 @@ import { RightHead } from "./headRightSideSec"
 const menuItems = [
     { name: "Home", href: "/" },
     // { name: "About", href: "/#tech-stack" },
-    { name: "About", href: "/about" },
+    { name: "About", href: "/#about" },
+    // { name: "About", href: "/about" },
     { name: "Blog", href: "/blogs" },
     { name: "Project", href: "/projects" },
     // { name: "Dashboard", href: "/dashboard" },
