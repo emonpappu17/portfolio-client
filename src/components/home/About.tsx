@@ -105,7 +105,7 @@ const About = ({ about }: { about: IAbout }) => {
 
                 {/* Details Card */}
                 <motion.div
-                    className="rounded-2xl bg-card/40 border border-border/50 p-10 shadow-md"
+                    className="rounded-2xl bg-card/40 border border-border/50 md:p-10 p-4 shadow-md"
                     variants={fadeInUp}
                     initial="initial"
                     animate="animate"

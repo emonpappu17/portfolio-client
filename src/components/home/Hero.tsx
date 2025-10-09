@@ -36,7 +36,6 @@ const Hero = () => {
     const images = slugs.map(
         (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`
     );
-
     return (
         <section className="relative overflow-hidden">
             <div className="relative py-20 md:py-28">

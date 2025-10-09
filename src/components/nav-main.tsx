@@ -18,7 +18,7 @@ import {
   SidebarMenuSubItem
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 export function NavMain({
   items,
@@ -35,7 +35,7 @@ export function NavMain({
   }[]
 }) {
   const pathname = usePathname();
-  const router = useRouter();
+
 
   return (
     <SidebarGroup>

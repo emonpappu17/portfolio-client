@@ -1,4 +1,5 @@
 import About from '@/components/home/About';
+import Contact from '@/components/home/Contact';
 import Hero from '@/components/home/Hero';
 import { baseUrl } from '@/config/baseUrl';
 import { IAbout } from '@/types';
@@ -13,9 +14,10 @@ const HomePage = async () => {
   // console.log(about);
 
   return (
-    <main>
+    <main className=''>
       <Hero></Hero>
       <About about={about}></About>
+      <Contact></Contact>
     </main>
   );
 };
