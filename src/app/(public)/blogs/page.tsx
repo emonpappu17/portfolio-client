@@ -8,7 +8,8 @@ export default async function BlogPage() {
             tags: ["blogs"]
         }
     })
-    if (!res.ok) throw new Error("Failed to fetch blogs");
+    if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Blogs not found</p>;;
+
     const data = await res.json();
 
     return (

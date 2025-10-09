@@ -10,7 +10,11 @@ export const metadata: Metadata = {
   title: "EmonDev | Full-Stack Web Developer",
   description:
     "Assalamualaikum, I am Emon Howlader — a full‑stack web developer building clean, responsive, and user‑friendly applications with Next.js, React, Node.js and modern web technologies.",
+  keywords: ["Full-Stack Developer", "Next.js", "React", "Node.js", "Express.js", "PostgreSQL", "MongoDB", "Portfolio"],
+  authors: [{ name: "Emon Howlader" }],
+  creator: "EmonDev",
 };
+
 
 const HomePage = async () => {
   const res = await fetch(`${baseUrl}/about`, {
@@ -18,7 +22,7 @@ const HomePage = async () => {
   })
   const data = await res.json();
   const about = data?.data as IAbout
-  
+
   return (
     <main>
       <Hero></Hero>
