@@ -29,3 +29,23 @@ export interface IAbout {
     createdAt: string;
     updatedAt: string;
 }
+
+
+export interface IAuthor {
+    name: string;
+}
+
+export interface IBlog {
+    id: string;
+    title: string;
+    content: string;
+    thumbnail: string;
+    slug: string;
+    authorId: string;
+    tags: string[];
+    views: number;
+    createdAt: string;
+    updatedAt: string;
+    author: IAuthor;
+}
+

@@ -1,33 +1,12 @@
+"use client";
+
+import { Badge } from "@/components/ui/badge";
+import { IBlog } from "@/types";
 import { format } from "date-fns";
+import { Eye } from "lucide-react";
 import Image from "next/image";
-import React from "react";
-import DOMPurify from "isomorphic-dompurify";
 
-interface Author {
-    name: string;
-}
-
-export interface Blog {
-    id: string;
-    title: string;
-    content: string;
-    thumbnail: string;
-    slug: string;
-    authorId: string;
-    tags: string[];
-    views: number;
-    createdAt: string;
-    updatedAt: string;
-    author: Author;
-}
-
-interface BlogDetailProps {
-    blog: Blog;
-}
-
-const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
-    const cleanContent = DOMPurify.sanitize(blog.content);
-
+const BlogDetail = ({ blog }: { blog: IBlog }) => {
     const initials = blog.author.name
         .split(" ")
         .map((n) => n[0])
@@ -35,78 +14,64 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ blog }) => {
         .slice(0, 2)
         .toUpperCase();
 
-    console.log(cleanContent);
-
     return (
-        <article className="mx-auto max-w-4xl px-4 my-24 sm:px-6 lg:px-8">
-            {/* Thumbnail */}
+        <article className="max-w-4xl mx-auto px-5 py-26">
+            {/* Hero Image */}
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-md">
                 <Image
                     src={blog.thumbnail}
                     alt={blog.title}
                     fill
+                    className="object-cover"
                     priority
-                    sizes="(min-width: 1024px) 800px, 100vw"
-                    className="object-cover transition-transform duration-700 ease-out hover:scale-[1.02]"
                 />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent rounded-2xl" />
             </div>
 
             {/* Title */}
-            <h1 className="mt-8 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-4xl">
+            <h1 className="mt-8 text-3xl md:text-4xl font-bold tracking-tight text-foreground text-center">
                 {blog.title}
             </h1>
 
-            {/* Meta info */}
-            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400">
-                <div className="flex items-center gap-2">
-                    <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white shadow-sm">
+            {/* Meta Info */}
+            <div className="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground border-b pb-6">
+                <div className="flex items-center gap-3">
+                    {/* Author Avatar */}
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white shadow-sm">
                         {initials}
                     </div>
-                    <span className="font-medium">{blog.author.name}</span>
+                    <div>
+                        <p className="font-medium text-foreground">{blog.author.name}</p>
+                        <p>{format(new Date(blog.createdAt), "MMM dd, yyyy")}</p>
+                    </div>
                 </div>
-                <span>•</span>
-                <time dateTime={blog.createdAt}>
-                    {format(new Date(blog.createdAt), "MMM dd, yyyy")}
-                </time>
-                <span>•</span>
-                <span>
-                    {blog.views} view{blog.views !== 1 && "s"}
-                </span>
-            </div>
 
-            {/* Tags */}
-            {blog.tags?.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2">
-                    {blog.tags.map((tag, i) => (
-                        <span
-                            key={i}
-                            className="inline-flex items-center rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                        >
+                {/* Views + Tags */}
+                <div className="flex flex-wrap items-center gap-3">
+                    <span className="flex items-center gap-1 text-xs">
+                        <Eye className="h-4 w-4" /> {blog.views} views
+                    </span>
+                    {blog.tags?.map((tag, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
                             #{tag}
-                        </span>
+                        </Badge>
                     ))}
                 </div>
-            )}
+            </div>
 
             {/* Content */}
             <div
-                className="prose prose-neutral mt-8 max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-indigo-600 dark:prose-a:text-indigo-400"
-            // dangerouslySetInnerHTML={{ __html: cleanContent }}
-            >
-                <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                className="prose prose-neutral dark:prose-invert max-w-none mt-8"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+            />
+
+            {/* Updated Date */}
+            <div className="mt-12 text-xs text-muted-foreground text-center">
+                Last updated: {format(new Date(blog.updatedAt), "MMM dd, yyyy")}
             </div>
-
-            {/* <div className="prose prose-lg max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-            </div> */}
-
-            {/* Updated date */}
-            <p className="mt-10 text-xs text-neutral-500 dark:text-neutral-400">
-                Last updated on {format(new Date(blog.updatedAt), "MMM dd, yyyy")}
-            </p>
         </article>
     );
 };
 
 export default BlogDetail;
+

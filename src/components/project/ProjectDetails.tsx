@@ -9,7 +9,7 @@ import { ExternalLink, Code2, CheckCircle2, Calendar } from "lucide-react";
 import { format } from "date-fns";
 
 const ProjectDetails = ({ project }: { project: IProject }) => {
-    console.log(project);
+    // console.log(project);
     return (
         <section className="max-w-4xl mx-auto px-5 py-26">
             {/* Hero Section */}
