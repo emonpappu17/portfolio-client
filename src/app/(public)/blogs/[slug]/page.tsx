@@ -75,7 +75,7 @@ const BlogDetailsPage = async ({
     const { slug } = await params;
     const res = await fetch(`${baseUrl}/blog/${slug}`)
 
-    if (!res.ok) return <p>Not found</p>;
+    if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Blog not found</p>;
     const data = await res.json();
     const blog = data?.data;
 

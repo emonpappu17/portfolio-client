@@ -1,7 +1,13 @@
 import ProjectCard from '@/components/project/ProjectCard';
 import { baseUrl } from '@/config/baseUrl';
 import { IProject } from '@/types';
+import { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+    title: "My Projects | EmonDev",
+    description: "A collection of my recent projects.",
+};
 
 const ProjectsPage = async () => {
     const res = await fetch(`${baseUrl}/project`, {

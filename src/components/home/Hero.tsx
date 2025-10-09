@@ -77,7 +77,7 @@ const Hero = () => {
                         >
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                                 <Button asChild>
-                                    <Link href="#projects">
+                                    <Link href="/projects">
                                         <FolderGit2 className="size-4" />
                                         <span className="text-nowrap">View Projects</span>
                                     </Link>
