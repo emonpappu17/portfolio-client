@@ -4,6 +4,7 @@ import { format } from "date-fns"
 import Image from "next/image"
 import Link from "next/link"
 import { FC } from "react"
+import { Badge } from "../ui/badge"
 
 interface Blog {
     title: string
@@ -79,12 +80,9 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                 {blog.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {blog.tags.slice(0, 4).map((tag, i) => (
-                            <span
-                                key={i}
-                                className="inline-flex items-center rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs font-medium text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                            >
+                            <Badge key={i} variant="secondary" className="text-xs">
                                 #{tag}
-                            </span>
+                            </Badge>
                         ))}
                     </div>
                 )}
