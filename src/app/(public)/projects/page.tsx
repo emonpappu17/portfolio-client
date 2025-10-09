@@ -9,7 +9,7 @@ const ProjectsPage = async () => {
             tags: ["projects"]
         }
     })
-
+    if (!res.ok) return <p>Not found</p>;
     const data = await res.json();
     const projects = data?.data as IProject[]
     // console.log(projects);

@@ -80,7 +80,9 @@ const BlogDetailsPage = async ({
     const blog = data?.data;
 
     return (
-        <BlogDetail blog={blog}></BlogDetail>
+        <main>
+            <BlogDetail blog={blog}></BlogDetail>
+        </main>
     );
 };
 
