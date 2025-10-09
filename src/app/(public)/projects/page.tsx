@@ -15,7 +15,7 @@ const ProjectsPage = async () => {
             tags: ["projects"]
         }
     })
-    if (!res.ok) return <p>Not found</p>;
+    if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Projects not found</p>;;
     const data = await res.json();
     const projects = data?.data as IProject[]
     // console.log(projects);
