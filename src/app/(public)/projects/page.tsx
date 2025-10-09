@@ -1,10 +1,42 @@
+import ProjectCard from '@/components/project/ProjectCard';
+import { baseUrl } from '@/config/baseUrl';
+import { IProject } from '@/types';
 import React from 'react';
 
-const ProjectsPage = () => {
+const ProjectsPage = async () => {
+    const res = await fetch(`${baseUrl}/project`, {
+        next: {
+            tags: ["projects"]
+        }
+    })
+
+    const data = await res.json();
+    const projects = data?.data as IProject[]
+    // console.log(projects);
     return (
-        <div>
-            <h1>ProjectsPage</h1>
-        </div>
+        <main>
+            <div className='max-w-6xl mx-auto mt-20 mb-20 px-5'>
+                <div className="text-center mb-12">
+                    <h1
+                        className="text-3xl md:text-5xl font-bold mb-4 
+    bg-gradient-to-r from-primary to-primary/70 
+    bg-clip-text text-transparent"
+                    >
+                        My Projects
+                    </h1>
+                    <p className="text-xl text-muted-foreground">
+                        A collection of my recent Projects
+                    </p>
+                </div>
+                <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 '>
+                    {
+                        projects?.map(project => (
+                            <ProjectCard key={project.id} project={project}></ProjectCard>
+                        ))
+                    }
+                </div>
+            </div>
+        </main>
     );
 };
 
