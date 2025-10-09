@@ -74,8 +74,8 @@ export default function LoginForm() {
     }
 
     return (
-        <section className="px-4 py-16 md:py-32 w-full">
-            <Card className="w-[350px] shadow-md bg-card/40">
+        <section className="px-4 py-20 md:py-32 w-full flex items-center justify-center">
+            <Card className="w-[350px] shadow-sm bg-card/40">
                 <CardHeader className="text-center">
                     {/* <Link href="/" aria-label="Go home" className="mx-auto block w-fit">
                         <Logo />

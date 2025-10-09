@@ -63,7 +63,7 @@ const Contact = () => {
         variants={fadeInUp}
         transition={{ delay: 0.1 }}
       >
-        <Card className="rounded-3xl border border-border/40 shadow-xl bg-card/40 backdrop-blur-md">
+        <Card className="rounded-3xl border border-border/40 shadow-sm bg-card/40">
           <CardContent className="md:p-10 p-4 space-y-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name */}
@@ -114,7 +114,7 @@ const Contact = () => {
               </div>
 
               {/* Submit Button */}
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+              <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.97 }}>
                 <Button type="submit" className="w-full text-base font-medium" disabled={isSubmitting}>
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>

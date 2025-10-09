@@ -14,7 +14,7 @@ const HomePage = async () => {
   // console.log(about);
 
   return (
-    <main className=''>
+    <main>
       <Hero></Hero>
       <About about={about}></About>
       <Contact></Contact>
