@@ -1,14 +1,39 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BlogList from "@/components/blog/BlogList";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { FolderClosedIcon, Plus } from "lucide-react";
 import Link from "next/link";
 import {
     Card,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { baseUrl } from "@/config/baseUrl";
+import { IBlog } from "@/types";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+
+const getAllBlog = async () => {
+    try {
+        const res = await fetch(`${baseUrl}/blog`, {
+            cache: "no-store"
+        })
+
+        if (!res.ok) return [];
+
+        const data = await res.json();
+
+        const blogs = data?.data?.data
+
+        console.log('blogs:==>', blogs);
+
+        return blogs as IBlog[]
+    } catch (error) {
+        return [];
+    }
+}
 
 const DashboardBlogsPage = async () => {
+    const blogs = await getAllBlog();
     return (
         <main >
             {/* Page Header */}
@@ -26,7 +51,31 @@ const DashboardBlogsPage = async () => {
                 </Card>
 
                 {/* Blog List */}
-                <BlogList />
+                {/* <BlogList /> */}
+
+                {
+                    blogs.length === 0
+                        ? <Card>
+                            <Empty>
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <FolderClosedIcon />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No Blogs Yet</EmptyTitle>
+                                    <EmptyDescription>
+                                        You haven&apos;t created any blogs yet. Get started by creating
+                                        your first blog.
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    <Link href={'/dashboard/blogs/create'}>
+                                        <Button>Create blog</Button>
+                                    </Link>
+                                </EmptyContent>
+                            </Empty>
+                        </Card>
+                        : <BlogList blogs={blogs} />
+                }
             </div>
         </main>
     );

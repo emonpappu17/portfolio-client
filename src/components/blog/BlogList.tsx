@@ -1,28 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { deleteBlog, fetchBlogs } from "@/services/blog/blog";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { IBlog } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
-import { revalidateTagFn } from "@/actions/revalidate";
-import { Eye, Edit, Trash2, User } from "lucide-react";
 import { format } from "date-fns";
-
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Edit, Eye, Trash2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-    Alert,
-    AlertDescription,
-    AlertTitle,
-} from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -34,124 +18,56 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { deleteBlogAction } from "@/actions/blogActions";
 
 
-// Skeleton loader
-const BlogCardSkeleton = () => (
-    <Card className="flex flex-col overflow-hidden">
-        <CardHeader>
-            <Skeleton className="h-6 w-3/4" /> {/* Title */}
-        </CardHeader>
-
-        <CardContent className="flex flex-col gap-3 text-sm">
-            {/* Author + Meta */}
-            <div className="flex items-center gap-2">
-                <Skeleton className="h-8 w-8 rounded-full" /> {/* Avatar */}
-                <Skeleton className="h-4 w-24" /> {/* Author name */}
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-                <Skeleton className="h-3 w-20" /> {/* Date */}
-                <Skeleton className="h-3 w-12" /> {/* Views */}
-            </div>
-
-            {/* Tags */}
-            <div className="flex gap-2 flex-wrap">
-                <Skeleton className="h-5 w-12 rounded" />
-                <Skeleton className="h-5 w-16 rounded" />
-                <Skeleton className="h-5 w-10 rounded" />
-            </div>
-        </CardContent>
-
-        <CardFooter className="flex gap-2 mt-auto">
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-            <Skeleton className="h-8 w-8 rounded" />
-        </CardFooter>
-    </Card>
-);
-
-
-const BlogList = () => {
-    const queryClient = useQueryClient();
-
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["blogs"],
-        queryFn: fetchBlogs,
-    });
-
-    const { mutate, isPending: isDeleting } = useMutation({
-        mutationFn: (id: string) => deleteBlog(id),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ["blogs"] });
-            await revalidateTagFn("blogs");
-        },
-    });
-
-    const blogs = data?.data?.data;
-
-    if (isLoading) {
-        return (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                    <BlogCardSkeleton key={i} />
-                ))}
-            </div>
-        );
-    }
-
-    if (isError) {
-        return (
-            <Alert variant="destructive" className="w-full flex items-center justify-center sm:w-[400px] md:w-[600px] text-center" >
-                <div>
-                    <AlertTitle>Failed to load blogs</AlertTitle>
-                    <AlertDescription>
-                        {(error as Error)?.message || "Something went wrong."}
-                    </AlertDescription>
-                </div>
-            </Alert>
-        );
-    }
-
-    if (!blogs || blogs.length === 0) {
-        return (
-            <Alert className="w-full flex items-center justify-center sm:w-[400px] md:w-[600px] text-center">
-                <div>
-                    <AlertTitle>No blogs found</AlertTitle>
-                    <AlertDescription>
-                        Create your first blog to get started!
-                    </AlertDescription>
-                </div>
-            </Alert>
-        );
-    }
-
+const BlogList = ({ blogs }: { blogs: IBlog[] }) => {
     return (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {blogs.map((blog: any) => {
-                const initials = blog.author?.name
-                    ?.split(" ")
-                    .map((n: string) => n[0])
-                    .join("")
-                    .slice(0, 2)
-                    .toUpperCase();
+            {blogs.map((blog) => {
+                const initials =
+                    blog.author?.name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase() || "U";
 
                 return (
-                    <Card key={blog.id} className="flex flex-col overflow-hidden">
-                        <CardHeader>
-                            <CardTitle className="text-lg line-clamp-2">
-                                {blog.title}
-                            </CardTitle>
-                        </CardHeader>
+                    <div
+                        key={blog.id}
+                        className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/70 shadow-sm ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:ring-black/10 dark:bg-neutral-900/60 dark:ring-white/10"
+                    >
+                        {/* Thumbnail */}
+                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl">
+                            <Image
+                                src={blog.thumbnail}
+                                alt={blog.title}
+                                fill
+                                sizes="(min-width: 1024px) 480px, 100vw"
+                                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                            />
+                            <div className="pointer-events-none absolute inset-0 rounded-t-2xl bg-gradient-to-t from-black/10 via-transparent to-transparent dark:from-black/30" />
+                        </div>
 
-                        <CardContent className="flex flex-col gap-3 text-sm text-neutral-600 dark:text-neutral-400">
-                            {/* Author + Meta */}
-                            <div className="flex items-center gap-2">
-                                <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white shadow-sm">
-                                    {initials || <User className="h-4 w-4" />}
+                        {/* Body */}
+                        <div className="flex flex-col gap-3 p-4 flex-1">
+                            {/* Title */}
+                            <h3 className="line-clamp-2 text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+                                {blog.title}
+                            </h3>
+
+                            {/* Meta Info */}
+                            <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                                <div className="flex items-center gap-2">
+                                    <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white shadow-sm">
+                                        {initials || <User className="h-4 w-4" />}
+                                    </div>
+                                    <span>{blog.author?.name || "Unknown"}</span>
                                 </div>
-                                <span className="font-medium">{blog.author?.name}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs">
+
+                            <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
                                 <time dateTime={blog.createdAt}>
                                     {format(new Date(blog.createdAt), "MMM dd, yyyy")}
                                 </time>
@@ -160,55 +76,64 @@ const BlogList = () => {
                             </div>
 
                             {/* Tags */}
-                            <div className="flex gap-2 flex-wrap">
-                                {blog.tags?.slice(0, 3).map((tag: string, i: number) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
-                                        {tag}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </CardContent>
+                            {blog.tags?.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                    {blog.tags.slice(0, 3).map((tag, i) => (
+                                        <Badge
+                                            key={i}
+                                            variant="outline"
+                                            className="text-xs font-medium"
+                                        >
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            )}
 
-                        <CardFooter className="flex gap-2 mt-auto">
-                            <Link href={`/blogs/${blog.slug}`} target="_blank">
-                                <Button variant="outline" size="sm">
-                                    <Eye className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <Link href={`/dashboard/blogs/${blog.slug}`}>
-                                <Button variant="outline" size="sm">
-                                    <Edit className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="text-red-600 hover:text-red-700"
-                                        disabled={isDeleting}
-                                    >
-                                        <Trash2 className="h-4 w-4" />
+                            {/* Action Buttons */}
+                            <div className="mt-auto flex justify-end gap-2 pt-2">
+                                <Link href={`/blogs/${blog.slug}`} target="_blank">
+                                    <Button variant="outline" size="sm">
+                                        <Eye className="h-4 w-4" />
                                     </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete
-                                            your blog.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => mutate(blog.id)}>
-                                            Continue
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </CardFooter>
-                    </Card>
+                                </Link>
+                                <Link href={`/dashboard/blogs/${blog.slug}`}>
+                                    <Button variant="outline" size="sm">
+                                        <Edit className="h-4 w-4" />
+                                    </Button>
+                                </Link>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="text-red-600 hover:text-red-700"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete
+                                                your blog.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => deleteBlogAction(blog.id)}>
+                                                Continue
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </div>
+                        </div>
+
+                        {/* Subtle bottom accent */}
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500/60 via-violet-500/60 to-fuchsia-500/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    </div>
                 );
             })}
         </div>
@@ -216,3 +141,4 @@ const BlogList = () => {
 };
 
 export default BlogList;
+
