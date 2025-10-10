@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "../ui/button";
+import { Card, CardHeader } from "../ui/card";
 import {
     Form,
     FormControl,
@@ -14,19 +18,15 @@ import {
     FormLabel,
     FormMessage,
 } from "../ui/form";
-import { Card, CardHeader } from "../ui/card";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
 
-import { Spinner } from "../ui/spinner";
-import ImageUploader from "../comp-544";
-import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
-import { createProjectAction } from "@/actions/projectActions";
-import { IProject } from "@/types";
+import { createProjectAction, updateProjectAction } from "@/actions/projectActions";
 import { FileMetadata } from "@/hooks/use-file-upload";
+import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
+import { IProject } from "@/types";
+import ImageUploader from "../comp-544";
+import { Spinner } from "../ui/spinner";
 
 // ✅ Schema
 const projectSchema = z.object({
@@ -51,6 +51,8 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isPending, startTransition] = useTransition();
     const isEditMode = Boolean(project);
+
+    console.log(isEditMode);
 
     const form = useForm<ProjectInput>({
         resolver: zodResolver(projectSchema),
@@ -88,21 +90,21 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             };
 
             startTransition(async () => {
-                const res = await createProjectAction(finalData as any);
+                const res = isEditMode ? await updateProjectAction(project?.id as string, finalData) : await createProjectAction(finalData as any);
                 if (res?.success) {
-                    toast.success("Project created successfully!");
+                    toast.success(`Project ${isEditMode ? 'updated' : 'created'} successfully!`);
                     form.reset();
                     setIsSubmitting(false)
                     router.push("/dashboard/projects");
                 } else {
                     setIsSubmitting(false)
-                    toast.error(res?.message || "Failed to create project");
+                    toast.error(res?.message || `Failed to ${isEditMode ? 'update' : 'create'} project!`);
                 }
             });
         } catch (error) {
             console.error(error);
             setIsSubmitting(false)
-            toast.error("Something went wrong while creating the project");
+            toast.error(`Something went wrong to ${isEditMode ? 'update' : 'create'} project!`);
         }
     };
 

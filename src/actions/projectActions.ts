@@ -16,6 +16,7 @@ const getToken = async () => {
 //  CREATE Project
 export const createProjectAction = async (data: IProject) => {
     const token = await getToken();
+    console.log('createProjectAction hit');
 
     try {
         const res = await fetch(`${baseUrl}/project`, {
@@ -43,7 +44,7 @@ export const createProjectAction = async (data: IProject) => {
 //  UPDATE Project
 export const updateProjectAction = async (id: string, data: Partial<IProject>) => {
     const token = await getToken();
-
+    console.log('updateProjectAction hit');
     try {
         const res = await fetch(`${baseUrl}/project/${id}`, {
             method: "PATCH",
