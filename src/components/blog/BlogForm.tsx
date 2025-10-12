@@ -197,7 +197,7 @@ const BlogForm = ({ blog }: BlogFormProps) => {
                                         theme="snow"
                                         value={field.value}
                                         onChange={field.onChange}
-                                        className="mb-12"
+                                        className="mb-15"
                                         modules={modules}
                                     />
                                 </FormControl>
