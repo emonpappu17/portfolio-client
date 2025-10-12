@@ -172,7 +172,7 @@ const About = ({ about }: { about: IAbout }) => {
                         </h3>
                         <div className="mt-4 flex flex-wrap gap-2">
                             {about.skills.map((skill, i) => (
-                                <Badge key={i} variant="secondary" className="text-sm">
+                                <Badge key={i} variant="outline" className="text-sm">
                                     {skill}
                                 </Badge>
                             ))}

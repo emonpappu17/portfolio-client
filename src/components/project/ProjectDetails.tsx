@@ -83,7 +83,7 @@ const ProjectDetails = ({ project }: { project: IProject }) => {
                     </h2>
                     <div className="flex flex-wrap gap-2">
                         {project.technologies?.map((tech, i) => (
-                            <Badge key={i} variant="secondary" className="text-sm">
+                            <Badge key={i} variant="outline" className="text-sm">
                                 {tech}
                             </Badge>
                         ))}

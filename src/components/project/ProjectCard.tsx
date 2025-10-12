@@ -38,7 +38,7 @@ const ProjectCard = ({ project }: { project: IProject }) => {
                 {project.technologies?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-1">
                         {project.technologies.slice(0, 4).map((tech: string, i: number) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
+                            <Badge key={i} variant="outline" className="text-xs">
                                 {tech}
                             </Badge>
                         ))}

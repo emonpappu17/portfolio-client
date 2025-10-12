@@ -80,7 +80,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                 {blog.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {blog.tags.slice(0, 4).map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
+                            <Badge key={i} variant="outline" className="text-xs">
                                 #{tag}
                             </Badge>
                         ))}

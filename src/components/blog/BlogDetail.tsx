@@ -52,7 +52,7 @@ const BlogDetail = ({ blog }: { blog: IBlog }) => {
                         <Eye className="h-4 w-4" /> {blog.views} views
                     </span>
                     {blog.tags?.map((tag, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
+                        <Badge key={i} variant="outline" className="text-xs">
                             #{tag}
                         </Badge>
                     ))}
