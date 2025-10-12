@@ -16,7 +16,6 @@ const EditBlogPage = async ({
     return (
         <main>
             <BlogForm blog={blog}></BlogForm>
-            {/* <BlogEditor slug={editBlogSlug}></BlogEditor> */}
         </main>
     );
 };
