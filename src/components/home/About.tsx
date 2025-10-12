@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Github, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Github, Linkedin, MailIcon } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { IAbout } from "@/types";
@@ -98,6 +98,22 @@ const About = ({ about }: { about: IAbout }) => {
                                 className="p-2 rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
                             >
                                 <Linkedin className="h-5 w-5 text-foreground" />
+                            </Badge>
+                        </motion.a>
+                        <motion.a
+                            // href={about.linkedin}
+                            // href={''}
+                            href="mailto:emonbafsd@gmail.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <Badge
+                                variant="outline"
+                                className="p-2 rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
+                            >
+                                <MailIcon className="h-5 w-5 text-foreground" />
                             </Badge>
                         </motion.a>
                     </div>

@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BlogCard } from "@/components/blog/BlogCard";
 import { baseUrl } from "@/config/baseUrl";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "My Blogs | EmonDev",
+    description: "A collection of my recent blogs.",
+};
 
 export default async function BlogPage() {
     const res = await fetch(`${baseUrl}/blog`, {

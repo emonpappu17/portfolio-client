@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const generateStaticParams = async () => {
     const res = await fetch(`${baseUrl}/blog`, {
         next: {
-            revalidate: 60
+            tags: ["blogs"]
         }
     })
     if (!res.ok) throw new Error("Failed to fetch blogs");
@@ -44,7 +44,7 @@ export const generateMetadata = async ({
             )}.`;
 
     return {
-        title: blog?.title,
+        title: `${blog?.title} | EmonDev`,
         description,
         openGraph: {
             title: blog?.title,
