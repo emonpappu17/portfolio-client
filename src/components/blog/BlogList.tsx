@@ -36,7 +36,7 @@ const BlogList = ({ blogs }: { blogs: IBlog[] }) => {
                 return (
                     <div
                         key={blog.id}
-                        className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/70 shadow-sm ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:ring-black/10 dark:bg-neutral-900/60 dark:ring-white/10"
+                        className="group relative flex flex-col overflow-hidden rounded-2xl  shadow-sm ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:ring-black/10  dark:ring-white/10 bg-card"
                     >
                         {/* Thumbnail */}
                         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl">
@@ -130,9 +130,6 @@ const BlogList = ({ blogs }: { blogs: IBlog[] }) => {
                                 </AlertDialog>
                             </div>
                         </div>
-
-                        {/* Subtle bottom accent */}
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500/60 via-violet-500/60 to-fuchsia-500/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     </div>
                 );
             })}

@@ -51,9 +51,6 @@ const ProjectCard = ({ project }: { project: IProject }) => {
                     <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </div>
             </div>
-
-            {/* Bottom Accent */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500/60 via-violet-500/60 to-fuchsia-500/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </Link>
     );
 };

@@ -87,9 +87,6 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
                     </div>
                 )}
             </div>
-
-            {/* Subtle bottom accent */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500/60 via-violet-500/60 to-fuchsia-500/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </Link>
     )
 }

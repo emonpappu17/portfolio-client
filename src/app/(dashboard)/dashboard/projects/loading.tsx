@@ -17,7 +17,7 @@ export default function ProjectManagementLoading() {
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div
                             key={i}
-                            className="flex flex-col overflow-hidden rounded-2xl bg-white/70 shadow-sm ring-1 ring-black/5 dark:bg-neutral-900/60 dark:ring-white/10"
+                            className="flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-black/5 dark:ring-white/10"
                         >
                             {/* Thumbnail */}
                             <Skeleton className="aspect-[16/9] w-full rounded-t-2xl" />
