@@ -1,6 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { uploadImageToImgBB } from "@/services/uploadImageToImgBB";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import ImageUploader from "../comp-544";
+import { Button } from "../ui/button";
+import { Card, CardHeader } from "../ui/card";
 import {
     Form,
     FormControl,
@@ -8,95 +20,93 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Spinner } from "../ui/spinner";
+// import { createBlogAction } from "@/actions/blogActions";
+import { createBlogAction, updateBlogAction } from "@/actions/blogActions";
 import { FileMetadata } from "@/hooks/use-file-upload";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { IBlog } from "@/types";
 import "react-quill-new/dist/quill.snow.css";
-import { toast } from "sonner";
-import z from "zod";
-import ImageUploader from "../comp-544";
-import { Card, CardHeader } from "../ui/card";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-/** Schema */
-const formSchema = z.object({
-    title: z.string().min(2, { message: "Title must be at least 2 characters." }),
-    content: z.string().min(1, { message: "Content is required." }),
-    tags: z
-        .array(z.string().min(1, "Tag cannot be empty"))
-        .min(1, { message: "Add at least 1 tag." }),
+// Schema 
+const blogSchema = z.object({
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    content: z.string().refine((val) => {
+        const plainText = val.replace(/<[^>]+>/g, "").trim();
+        return plainText.length >= 50;
+    }, { message: "Content must be at least 50 characters" }),
+    // content: z.string().min(20, "Content must be at least 50 characters"),
+    tags: z.string().min(1, "Provide at least one tag"),
 });
 
-export type BlogFormValues = z.infer<typeof formSchema>;
+export type BlogInput = z.infer<typeof blogSchema>;
 
-interface BlogFormProps {
-    initialValues?: Partial<BlogFormValues> & { thumbnail?: string };
-    onSubmit: (values: BlogFormValues & { thumbnail: string }) => Promise<void>;
-    title?: string;
-    submitLabel?: string;
-}
+type BlogFormProps = {
+    blog?: IBlog;
+};
 
-const BlogForm = ({
-    initialValues,
-    onSubmit,
-    title = "Create New Blog",
-    submitLabel = "Create",
-}: BlogFormProps) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [image, setImage] = useState<File | FileMetadata | null>(null);
+const BlogForm = ({ blog }: BlogFormProps) => {
     const router = useRouter();
+    const [image, setImage] = useState<File | FileMetadata | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, startTransition] = useTransition();
+    const isEditMode = Boolean(blog);
 
-    const form = useForm<BlogFormValues>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<BlogInput>({
+        resolver: zodResolver(blogSchema),
         defaultValues: {
-            title: initialValues?.title || "",
-            content: initialValues?.content || "",
-            tags: initialValues?.tags || [],
+            title: blog?.title || "",
+            content: blog?.content || "",
+            tags: blog?.tags?.join(", ") || "",
         },
     });
 
-    const { control, handleSubmit } = form;
+    // console.log(form.formState.errors.content);
 
-    const handleFormSubmit = async (values: BlogFormValues) => {
+    const handleFormSubmit = async (values: BlogInput) => {
         setIsSubmitting(true);
         try {
-            // Validate content length
-            const plainText = values.content.replace(/<[^>]+>/g, "").trim();
-            // console.log('plainText==>', plainText);
-            if (plainText.length < 50) {
-                setIsSubmitting(false);
-                return toast.error("Content must be at least 50 characters.");
-            }
+            let thumbnail = blog?.thumbnail || "";
 
-            let thumbnailUrl = initialValues?.thumbnail || "";
-
+            //  Upload new image if selected
             if (image) {
-                const { uploadImageToImgBB } = await import(
-                    "@/services/uploadImageToImgBB"
-                );
-                thumbnailUrl = await uploadImageToImgBB(image as File);
+                thumbnail = await uploadImageToImgBB(image as File);
             }
 
-            if (!thumbnailUrl) {
+            if (!thumbnail) {
                 setIsSubmitting(false);
-                return toast.error("Please add a thumbnail!");
+                return toast.error("Thumbnail missing");
             }
 
-            await onSubmit({ ...values, thumbnail: thumbnailUrl });
-            toast.success(`${submitLabel} successful!`);
-            router.push("/dashboard/blogs");
-        } catch (err) {
-            console.error(err);
-            toast.error(`Failed to ${submitLabel.toLowerCase()} blog`);
-        } finally {
+            const finalData = {
+                ...values,
+                thumbnail,
+                authorId: "cmg4k5lvq0000u2j4ziohsyds",
+                tags: values.tags.split(",").map((t) => t.trim()),
+            };
+            // console.log("finalData==>", finalData);
+            //  Call server action
+            startTransition(async () => {
+                const res = isEditMode ? await updateBlogAction(blog?.slug as string, finalData) : await createBlogAction(finalData as any);
+                if (res?.success) {
+                    form.reset();
+                    setIsSubmitting(false);
+                    router.push("/dashboard/blogs");
+                    toast.success(
+                        isEditMode ? "Blog updated successfully!" : "Blog created successfully!"
+                    );
+                } else {
+                    setIsSubmitting(false);
+                    toast.error(res?.message || "Failed to save blog");
+                }
+            });
+        } catch (error) {
+            console.error(error);
             setIsSubmitting(false);
+            toast.error("Something went wrong while saving the blog");
         }
     };
 
@@ -111,12 +121,11 @@ const BlogForm = ({
         ],
     };
 
-
-    // console.log(' initialValues?.thumbnail==>', initialValues?.thumbnail);
-
     return (
-        <Card className="max-w-3xl mx-auto p-6 bg-card mt-10 space-y-6">
-            <CardHeader className="text-2xl font-bold text-center">{title}</CardHeader>
+        <Card className="max-w-3xl mx-auto p-6 mt-10 space-y-6 bg-card shadow-lg rounded-xl">
+            <CardHeader className="text-2xl font-bold text-center">
+                {isEditMode ? "Edit Blog" : "Create Blog"}
+            </CardHeader>
 
             {/* Back Button */}
             <div className="flex justify-start">
@@ -124,7 +133,6 @@ const BlogForm = ({
                     type="button"
                     variant="outline"
                     onClick={() => router.back()}
-                    className="flex items-center gap-2"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back
@@ -132,16 +140,20 @@ const BlogForm = ({
             </div>
 
             <Form {...form}>
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+                <form
+                    onSubmit={form.handleSubmit(handleFormSubmit)}
+                    className="space-y-6"
+                    noValidate
+                >
                     {/* Title */}
                     <FormField
-                        control={control}
+                        control={form.control}
                         name="title"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Title</FormLabel>
                                 <FormControl>
-                                    <Input required placeholder="Enter blog title" {...field} />
+                                    <Input placeholder="Enter blog title" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -151,12 +163,31 @@ const BlogForm = ({
                     {/* Thumbnail */}
                     <div>
                         <p className="mb-1 font-medium">Thumbnail</p>
-                        <ImageUploader setImage={setImage} defaultImage={initialValues?.thumbnail} />
+                        <ImageUploader setImage={setImage} defaultImage={blog?.thumbnail} />
                     </div>
+
+                    {/* Tags */}
+                    <FormField
+                        control={form.control}
+                        name="tags"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tags (comma separated)</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="e.g. React, Next.js, TypeScript"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
 
                     {/* Content */}
                     <Controller
-                        control={control}
+                        control={form.control}
                         name="content"
                         render={({ field }) => (
                             <FormItem>
@@ -170,43 +201,23 @@ const BlogForm = ({
                                         modules={modules}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                {form.formState.errors.content && (
+                                    <p className="text-sm text-red-400 mt-1">
+                                        {form.formState.errors.content.message}
+                                    </p>
+                                )}
                             </FormItem>
                         )}
                     />
 
-                    {/* Tags */}
-                    <FormField
-                        control={control}
-                        name="tags"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tags (comma separated)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        required
-                                        placeholder="e.g. react,nextjs,typescript"
-                                        defaultValue={field.value?.join(",")}
-                                        onChange={(e) =>
-                                            field.onChange(
-                                                e.target.value
-                                                    .split(",")
-                                                    .map((tag) => tag.trim())
-                                                    .filter((tag) => tag.length > 0)
-                                            )
-                                        }
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                    {/* Submit */}
+                    <Button type="submit" className="w-full" disabled={isPending || isSubmitting}>
+                        {isPending || isSubmitting ? (
+                            <Spinner />
+                        ) : isEditMode ? (
+                            "Update Blog"
                         ) : (
-                            submitLabel
+                            "Create Blog"
                         )}
                     </Button>
                 </form>
@@ -216,7 +227,4 @@ const BlogForm = ({
 };
 
 export default BlogForm;
-
-
-
 

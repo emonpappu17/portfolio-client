@@ -1,5 +1,7 @@
 
-import BlogEditor from '@/components/blog/BlogEditor';
+import BlogForm from '@/components/blog/BlogForm';
+// import BlogForm from '@/components/blog/BlogForm';
+import { baseUrl } from '@/config/baseUrl';
 
 const EditBlogPage = async ({
     params,
@@ -8,11 +10,14 @@ const EditBlogPage = async ({
 }) => {
     const { editBlogSlug } = await params;
     // console.log('editBlogSlug==>', editBlogSlug);
+    const res = await fetch(`${baseUrl}/blog/${editBlogSlug}`)
+    const data = await res.json();
+    const blog = data?.data;
     return (
-        <div>
-            {/* <BlogForm></BlogForm> */}
-            <BlogEditor slug={editBlogSlug}></BlogEditor>
-        </div>
+        <main>
+            <BlogForm blog={blog}></BlogForm>
+            {/* <BlogEditor slug={editBlogSlug}></BlogEditor> */}
+        </main>
     );
 };
 

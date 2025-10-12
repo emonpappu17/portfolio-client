@@ -12,9 +12,9 @@ const EditProjectPage = async ({
     const data = await res.json();
     const project = data.data;
     return (
-        <div>
+        <main>
             <ProjectForm project={project}></ProjectForm>
-        </div>
+        </main>
     );
 };
 

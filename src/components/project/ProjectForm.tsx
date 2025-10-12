@@ -52,7 +52,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     const [isPending, startTransition] = useTransition();
     const isEditMode = Boolean(project);
 
-    console.log(isEditMode);
+    // console.log(isEditMode);
 
     const form = useForm<ProjectInput>({
         resolver: zodResolver(projectSchema),

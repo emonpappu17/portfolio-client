@@ -24,7 +24,7 @@ const getAllBlog = async () => {
 
         const blogs = data?.data?.data
 
-        console.log('blogs:==>', blogs);
+        // console.log('blogs:==>', blogs);
 
         return blogs as IBlog[]
     } catch (error) {
@@ -52,7 +52,6 @@ const DashboardBlogsPage = async () => {
 
                 {/* Blog List */}
                 {/* <BlogList /> */}
-
                 {
                     blogs.length === 0
                         ? <Card>

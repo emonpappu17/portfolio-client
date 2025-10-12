@@ -2,9 +2,9 @@ import ProjectForm from '@/components/project/ProjectForm';
 
 const CreateProject = () => {
     return (
-        <div>
+        <main>
             <ProjectForm></ProjectForm>
-        </div>
+        </main>
     );
 };
 
