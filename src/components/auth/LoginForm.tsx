@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { login } from '@/services/auth/auth'
+import { baseUrl } from '@/config/baseUrl'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -50,22 +50,24 @@ export default function LoginForm() {
     const onSubmit = async (values: LoginFormValues) => {
         setLoading(true)
 
-        // console.log(values);
-
         try {
-            const res = await login(values);
+            const res = await fetch(`${baseUrl}/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(values),
+            })
 
-            // console.log('res from onsumit:', res);
-
-            if (!res.success) {
-                const { message } = await res
-                toast.error(message)
-                throw new Error(message || 'Invalid credentials')
+            const resData = await res.json();
+            if (!res.ok || !resData.success) {
+                toast.error(resData.message || "Login failed")
+                throw new Error(resData.message || "Login failed");
             }
 
             router.push("/dashboard")
-            toast.success(`Welcome back ${res?.data?.user?.name}`)
-
+            toast.success(`Welcome back ${resData.data.user.name}!`)
         } catch (err: any) {
             console.log(err);
         } finally {
@@ -77,11 +79,7 @@ export default function LoginForm() {
         <section className="px-4 py-20 md:py-32 w-full flex items-center justify-center">
             <Card className="w-[350px] shadow-sm bg-card/40">
                 <CardHeader className="text-center">
-                    {/* <Link href="/" aria-label="Go home" className="mx-auto block w-fit">
-                        <Logo />
-                    </Link> */}
                     <Logo />
-
                     <CardTitle className="mt-4 text-xl">Admin Login</CardTitle>
                     <CardDescription>
                         Enter your credentials to access the dashboard
