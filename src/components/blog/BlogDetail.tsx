@@ -7,12 +7,20 @@ import { Eye } from "lucide-react";
 import Image from "next/image";
 
 const BlogDetail = ({ blog }: { blog: IBlog }) => {
-    const initials = blog.author.name
-        .split(" ")
+    const initials = blog.author?.name
+        ?.split(" ")
         .map((n) => n[0])
         .join("")
         .slice(0, 2)
         .toUpperCase();
+
+    const safeDate = (dateString?: string) => {
+        try {
+            return dateString ? format(new Date(dateString), "MMM dd, yyyy") : "";
+        } catch {
+            return "";
+        }
+    };
 
     return (
         <article className="max-w-4xl mx-auto px-5 py-26">
@@ -20,10 +28,13 @@ const BlogDetail = ({ blog }: { blog: IBlog }) => {
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-md">
                 <Image
                     src={blog.thumbnail}
-                    alt={blog.title}
+                    alt={blog.title || "Blog thumbnail"}
                     fill
-                    className="object-cover"
                     priority
+                    sizes="(max-width: 768px) 100vw,
+                 (max-width: 1200px) 80vw,
+                 1200px"
+                    style={{ objectFit: "cover" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent rounded-2xl" />
             </div>
@@ -41,8 +52,8 @@ const BlogDetail = ({ blog }: { blog: IBlog }) => {
                         {initials}
                     </div>
                     <div>
-                        <p className="font-medium text-foreground">{blog.author.name}</p>
-                        <p>{format(new Date(blog.createdAt), "MMM dd, yyyy")}</p>
+                        <p className="font-medium text-foreground">{blog.author?.name}</p>
+                        <p>{safeDate(blog.createdAt)}</p>
                     </div>
                 </div>
 
@@ -67,11 +78,12 @@ const BlogDetail = ({ blog }: { blog: IBlog }) => {
 
             {/* Updated Date */}
             <div className="mt-12 text-xs text-muted-foreground text-center">
-                Last updated: {format(new Date(blog.updatedAt), "MMM dd, yyyy")}
+                Last updated: {safeDate(blog.updatedAt)}
             </div>
         </article>
     );
 };
 
 export default BlogDetail;
+
 
