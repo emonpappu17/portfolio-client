@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
@@ -12,16 +13,23 @@ const fadeInUp = {
     transition: { duration: 0.6, ease: "easeOut" },
 };
 
+// Small helper to avoid repeating motion props
+const MotionDiv = ({ children, ...props }: any) => (
+    <motion.div
+        initial="initial"
+        animate="animate"
+        variants={fadeInUp}
+        {...props}
+    >
+        {children}
+    </motion.div>
+);
+
 const About = ({ about }: { about: IAbout }) => {
     return (
         <section id="about" className="py-14 relative overflow-hidden">
             {/* Section Heading */}
-            <motion.div
-                className="text-center mb-16 p-4"
-                initial="initial"
-                animate="animate"
-                variants={fadeInUp}
-            >
+            <MotionDiv className="text-center mb-16 p-4">
                 <h2 className="text-4xl font-bold tracking-tight text-foreground">
                     About Me
                 </h2>
@@ -30,31 +38,26 @@ const About = ({ about }: { about: IAbout }) => {
                     A quick look into my journey, skills, and what drives my passion for
                     creating meaningful digital experiences.
                 </p>
-            </motion.div>
+            </MotionDiv>
 
             <div className="mx-auto max-w-6xl px-6 md:px-12 grid gap-10 md:grid-cols-2">
                 {/* Profile Card */}
-                <motion.div
-                    className="flex flex-col items-center justify-center rounded-2xl bg-card/40 border border-border/50 p-10 shadow-sm"
-                    variants={fadeInUp}
-                    initial="initial"
-                    animate="animate"
-                >
+                <MotionDiv className="flex flex-col items-center justify-center rounded-2xl bg-card/40 border border-border/50 p-10 shadow-sm">
                     <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-primary/20 shadow-lg">
                         <Image
                             src={about.image}
                             alt={about.fullName}
                             fill
-                            className="object-cover"
+                            priority
+                            style={{ objectFit: "cover" }}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw,33vw"
                         />
                     </div>
 
                     <h2 className="mt-6 text-2xl font-semibold tracking-tight text-foreground">
                         {about.fullName}
                     </h2>
-                    <p className="text-primary font-medium">
-                        {about.title}
-                    </p>
+                    <p className="text-primary font-medium">{about.title}</p>
 
                     <div className="mt-6 space-y-2 text-sm text-muted-foreground">
                         <p className="flex items-center justify-center gap-2">
@@ -101,9 +104,7 @@ const About = ({ about }: { about: IAbout }) => {
                             </Badge>
                         </motion.a>
                         <motion.a
-                            // href={about.linkedin}
-                            // href={''}
-                            href="mailto:emonbafsd@gmail.com"
+                            href={`mailto:${about.email}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.1 }}
@@ -117,14 +118,11 @@ const About = ({ about }: { about: IAbout }) => {
                             </Badge>
                         </motion.a>
                     </div>
-                </motion.div>
+                </MotionDiv>
 
                 {/* Details Card */}
-                <motion.div
+                <MotionDiv
                     className="rounded-2xl bg-card/40 border border-border/50 md:p-10 p-4 shadow-md"
-                    variants={fadeInUp}
-                    initial="initial"
-                    animate="animate"
                     transition={{ delay: 0.1 }}
                 >
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">
@@ -196,8 +194,8 @@ const About = ({ about }: { about: IAbout }) => {
                     </div>
 
                     {/* Passion Section */}
-                    {
-                        about.whatILove && <div className="mt-8">
+                    {about.whatILove && (
+                        <div className="mt-8">
                             <h3 className="text-xl font-semibold tracking-tight text-foreground">
                                 What I Love to Build
                             </h3>
@@ -205,15 +203,13 @@ const About = ({ about }: { about: IAbout }) => {
                                 {about.whatILove}
                             </p>
                         </div>
-                    }
-                </motion.div>
+                    )}
+                </MotionDiv>
             </div>
         </section>
     );
 };
 
 export default About;
-
-
 
 
