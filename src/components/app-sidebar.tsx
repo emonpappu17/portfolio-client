@@ -47,10 +47,6 @@ const data = {
           title: "Blog List",
           url: "/dashboard/blogs",
         },
-        // {
-        //   title: "Create",
-        //   url: "/dashboard/blogs/create",
-        // },
       ],
     },
     {
@@ -62,12 +58,19 @@ const data = {
           title: "Project List",
           url: "/dashboard/projects",
         },
-        // {
-        //   title: "Create",
-        //   url: "/dashboard/projects/create",
-        // },
       ],
     },
+    // {
+    //   title: "Profile Management",
+    //   url: "#",
+    //   icon: FolderKanban,
+    //   items: [
+    //     {
+    //       title: "Profile",
+    //       url: "/dashboard/projects",
+    //     },
+    //   ],
+    // },
   ],
 }
 

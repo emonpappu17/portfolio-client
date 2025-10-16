@@ -70,7 +70,7 @@ const BlogForm = ({ blog }: BlogFormProps) => {
         setIsSubmitting(true);
         try {
             let thumbnail = blog?.thumbnail || "";
-
+            console.log("image==>", image);
             //  Upload new image if selected
             if (image) {
                 thumbnail = await uploadImageToImgBB(image as File);

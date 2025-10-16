@@ -7,6 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { RightHead } from "./headRightSideSec"
+// import { RightHead } from "./headRightSideSec"
 
 const menuItems = [
     { name: "Home", href: "/" },
@@ -110,7 +111,7 @@ export const HeroHeader = () => {
                                     })}
                                 </ul>
                             </div>
-                            <RightHead isScrolled={isScrolled}></RightHead>
+                            <RightHead></RightHead>
                         </div>
                     </div>
                 </div>

@@ -88,13 +88,6 @@ export default function LoginForm() {
 
                 <CardContent>
                     <Separator className="my-4" />
-                    {/* 
-                    {error && (
-                        <p className="mb-4 rounded-md bg-destructive/15 p-2 text-sm text-destructive">
-                            {error}
-                        </p>
-                    )} */}
-
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                             {/* Email */}
@@ -126,9 +119,6 @@ export default function LoginForm() {
                                     <FormItem>
                                         <div className="flex items-center justify-between">
                                             <FormLabel>Password</FormLabel>
-                                            {/* <Button variant="link" size="sm" asChild>
-                                                <Link href="#">Forgot password?</Link>
-                                            </Button> */}
                                         </div>
                                         <FormControl>
                                             <Input

@@ -9,7 +9,6 @@ const EditBlogPage = async ({
     params: Promise<{ editBlogSlug: string }>
 }) => {
     const { editBlogSlug } = await params;
-    // console.log('editBlogSlug==>', editBlogSlug);
     const res = await fetch(`${baseUrl}/blog/${editBlogSlug}`)
     const data = await res.json();
     const blog = data?.data;
