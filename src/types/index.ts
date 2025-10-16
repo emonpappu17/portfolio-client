@@ -49,3 +49,37 @@ export interface IBlog {
     author: IAuthor;
 }
 
+
+export interface IDashboardOverview {
+    totalBlogs: number;
+    totalProjects: number;
+    totalViews: number;
+    recentBlogs: RecentBlog[];
+    recentProjects: RecentProject[];
+    about: AboutInfo;
+}
+
+export interface RecentBlog {
+    id: string;
+    title: string;
+    thumbnail: string;
+    createdAt: string;
+    slug: string;
+}
+
+export interface RecentProject {
+    id: string;
+    title: string;
+    thumbnail: string;
+    live_link: string;
+    createdAt: string;
+}
+
+export interface AboutInfo {
+    fullName: string;
+    title: string;
+    image: string;
+    bio: string;
+}
+
+
