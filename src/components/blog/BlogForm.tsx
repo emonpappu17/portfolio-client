@@ -28,7 +28,6 @@ import { createBlogAction, updateBlogAction } from "@/actions/blogActions";
 import { FileMetadata } from "@/hooks/use-file-upload";
 import { IBlog } from "@/types";
 import "react-quill-new/dist/quill.snow.css";
-import { error } from "console";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -78,7 +77,7 @@ const BlogForm = ({ blog }: BlogFormProps) => {
                 const res = await uploadImageToImgBB(image as File);
                 if (res.error) {
                     setIsSubmitting(false);
-                    return toast.error(res.message)
+                    return toast.error(res.message ||'Image server error')
                 } else {
                     setIsSubmitting(false);
                     thumbnail = res;

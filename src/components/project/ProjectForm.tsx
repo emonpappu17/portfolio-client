@@ -78,7 +78,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                 const res = await uploadImageToImgBB(image as File);
                 if (res.error) {
                     setIsSubmitting(false);
-                    return toast.error(res.message)
+                    return toast.error(res.message || 'Image server error')
                 } else {
                     setIsSubmitting(false);
                     thumbnail = res;
