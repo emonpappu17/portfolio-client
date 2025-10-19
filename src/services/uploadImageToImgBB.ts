@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
 export const uploadImageToImgBB = async (imageFile: File) => {
@@ -14,7 +15,11 @@ export const uploadImageToImgBB = async (imageFile: File) => {
             throw new Error("Image upload failed")
         }
 
-    } catch (error) {
+    } catch (error: any) {
         console.log('uploadImageToImgBB err==>', error);
+        return {
+            error: true,
+            message: error.response.data.error.message,
+        }
     }
 }

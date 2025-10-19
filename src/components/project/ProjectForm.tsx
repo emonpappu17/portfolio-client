@@ -74,7 +74,15 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             let thumbnail = project?.thumbnail || "";
 
             if (image) {
-                thumbnail = await uploadImageToImgBB(image as File);
+                // thumbnail = await uploadImageToImgBB(image as File);
+                const res = await uploadImageToImgBB(image as File);
+                if (res.error) {
+                    setIsSubmitting(false);
+                    return toast.error(res.message)
+                } else {
+                    setIsSubmitting(false);
+                    thumbnail = res;
+                }
             }
 
             if (!thumbnail) {

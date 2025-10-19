@@ -28,6 +28,7 @@ import { createBlogAction, updateBlogAction } from "@/actions/blogActions";
 import { FileMetadata } from "@/hooks/use-file-upload";
 import { IBlog } from "@/types";
 import "react-quill-new/dist/quill.snow.css";
+import { error } from "console";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -70,10 +71,18 @@ const BlogForm = ({ blog }: BlogFormProps) => {
         setIsSubmitting(true);
         try {
             let thumbnail = blog?.thumbnail || "";
-            console.log("image==>", image);
+
             //  Upload new image if selected
             if (image) {
-                thumbnail = await uploadImageToImgBB(image as File);
+                // thumbnail = await uploadImageToImgBB(image as File);
+                const res = await uploadImageToImgBB(image as File);
+                if (res.error) {
+                    setIsSubmitting(false);
+                    return toast.error(res.message)
+                } else {
+                    setIsSubmitting(false);
+                    thumbnail = res;
+                }
             }
 
             if (!thumbnail) {
@@ -87,7 +96,7 @@ const BlogForm = ({ blog }: BlogFormProps) => {
                 authorId: "cmg4k5lvq0000u2j4ziohsyds",
                 tags: values.tags.split(",").map((t) => t.trim()),
             };
-            // console.log("finalData==>", finalData);
+
             //  Call server action
             startTransition(async () => {
                 const res = isEditMode ? await updateBlogAction(blog?.slug as string, finalData) : await createBlogAction(finalData as any);
