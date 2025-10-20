@@ -17,6 +17,8 @@ const getToken = async () => {
 export const createBlogAction = async (data: IBlog) => {
     const token = await getToken();
 
+    console.log({ token });
+
     try {
         const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
             method: "POST",

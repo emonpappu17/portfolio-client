@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import { login } from '@/actions/authActions'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,7 +21,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { baseUrl } from '@/config/baseUrl'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -51,23 +51,17 @@ export default function LoginForm() {
         setLoading(true)
 
         try {
-            const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(values),
-            })
+            const res = await login(values)
 
-            const resData = await res.json();
-            if (!res.ok || !resData.success) {
-                toast.error(resData.message || "Login failed")
-                throw new Error(resData.message || "Login failed");
+            if (!res.success) {
+                toast.error(res.message || "Login failed")
+                throw new Error(res.message || "Login failed");
             }
 
-            router.push("/dashboard")
-            toast.success(`Welcome back ${resData.data.user.name}!`)
+            if (res.success) {
+                router.push("/dashboard")
+                toast.success(`Welcome back Emon!`)
+            }
         } catch (err: any) {
             console.log(err);
         } finally {

@@ -14,11 +14,12 @@ import {
   SidebarFooter,
   SidebarHeader
 } from "@/components/ui/sidebar"
-import { logout } from "@/services/auth/auth"
+// import { logout } from "@/services/auth/auth"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Logo } from "./logo"
 import { Button } from "./ui/button"
+import { logout } from "@/actions/authActions"
 
 const data = {
   user: {

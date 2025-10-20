@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { getProfile } from '@/services/user/profile';
+// import { getProfile } from '@/services/user/profile';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { ModeToggle } from './shared/ModeToggle';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton'; // assuming you have a Skeleton component
+import { getProfile } from '@/actions/authActions';
 
 export const RightHead = () => {
     const { data, isLoading, isError } = useQuery({
@@ -15,6 +16,8 @@ export const RightHead = () => {
         queryFn: getProfile,
         // retry: false,
     });
+
+    // console.log({ data });
 
     return (
         <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">

@@ -117,7 +117,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {data.recentBlogs.map((blog) => (
+                            {data?.recentBlogs?.map((blog) => (
                                 <Link
                                     key={blog.id}
                                     href={`/dashboard/blogs`}
@@ -156,7 +156,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {data.recentProjects.map((project) => (
+                            {data?.recentProjects?.map((project) => (
                                 <Link
                                     key={project.id}
                                     href={'/dashboard/projects'}

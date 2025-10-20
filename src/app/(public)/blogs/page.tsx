@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BlogCard } from "@/components/blog/BlogCard";
-import { baseUrl } from "@/config/baseUrl";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
     title: "My Blogs | EmonDev",
     description: "A collection of my recent blogs.",
-};
-
-const getToken = async () => {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("accessToken");
-    return token?.value;
 };
 
 export default async function BlogPage() {
@@ -24,10 +16,6 @@ export default async function BlogPage() {
     if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Blogs not found</p>;;
 
     const data = await res.json();
-
-    const token = await getToken();
-
-    console.log('token from blogPage==>', token);
 
     return (
         <main>
