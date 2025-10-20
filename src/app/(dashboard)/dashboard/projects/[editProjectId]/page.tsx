@@ -8,7 +8,7 @@ const EditProjectPage = async ({
     params: Promise<{ editProjectId: string }>
 }) => {
     const { editProjectId } = await params;
-    const res = await fetch(`${baseUrl}/project/${editProjectId}`)
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${editProjectId}`)
     const data = await res.json();
     const project = data.data;
     return (

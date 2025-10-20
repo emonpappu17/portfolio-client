@@ -13,7 +13,7 @@ const getToken = async () => {
 const getOverview = async () => {
     const token = await getToken();
     try {
-        const res = await fetch(`${baseUrl}/overview`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/overview`, {
             cache: "no-store",
             headers: {
                 "Content-Type": "application/json",

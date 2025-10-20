@@ -14,7 +14,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 
 const getAllBlog = async () => {
     try {
-        const res = await fetch(`${baseUrl}/blog`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
             cache: "no-store"
         })
 

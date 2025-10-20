@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import React from 'react';
 
 export const generateStaticParams = async () => {
-    const res = await fetch(`${baseUrl}/project`, {
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
         next: {
             tags: ["projects"]
         }
@@ -23,7 +23,7 @@ export const generateMetadata = async ({
     params: Promise<{ id: string }>
 }): Promise<Metadata> => {
     const { id } = await params;
-    const res = await fetch(`${baseUrl}/project/${id}`, {
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
         next: { tags: ["projects"] },
     });
 
@@ -62,7 +62,7 @@ const ProjectDetailsPage = async ({
     params: Promise<{ id: string }>
 }) => {
     const { id } = await params;
-    const res = await fetch(`${baseUrl}/project/${id}`, {
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
         next: {
             tags: ["projects"]
         }

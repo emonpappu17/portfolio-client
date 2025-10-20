@@ -18,7 +18,7 @@ import {
 
 const getAllProject = async () => {
     try {
-        const res = await fetch(`${baseUrl}/project`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
             cache: "no-store"
         })
 

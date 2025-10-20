@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 
 const HomePage = async () => {
-  const res = await fetch(`${baseUrl}/about`, {
+  const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/about`, {
     cache: "force-cache"
   })
   const data = await res.json();

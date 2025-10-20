@@ -18,7 +18,7 @@ export const createBlogAction = async (data: IBlog) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`${baseUrl}/blog`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export const updateBlogAction = async (slug: string, data: Partial<IBlog>) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`${baseUrl}/blog/${slug}`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${slug}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export const deleteBlogAction = async (id: string) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`${baseUrl}/blog/${id}`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${id}`, {
             method: "DELETE",
             headers: {
                 Cookie: `accessToken=${token}`,

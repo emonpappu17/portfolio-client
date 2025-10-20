@@ -13,7 +13,7 @@ export const RightHead = () => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['profile'],
         queryFn: getProfile,
-        retry: false,
+        // retry: false,
     });
 
     return (

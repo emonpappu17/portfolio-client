@@ -19,7 +19,7 @@ export const createProjectAction = async (data: IProject) => {
     console.log('createProjectAction hit');
 
     try {
-        const res = await fetch(`${baseUrl}/project`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const updateProjectAction = async (id: string, data: Partial<IProject>) =
     const token = await getToken();
     console.log('updateProjectAction hit');
     try {
-        const res = await fetch(`${baseUrl}/project/${id}`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export const deleteProjectAction = async (id: string) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`${baseUrl}/project/${id}`, {
+        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
             method: "DELETE",
             headers: {
                 Cookie: `accessToken=${token}`,

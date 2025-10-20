@@ -9,7 +9,7 @@ const EditBlogPage = async ({
     params: Promise<{ editBlogSlug: string }>
 }) => {
     const { editBlogSlug } = await params;
-    const res = await fetch(`${baseUrl}/blog/${editBlogSlug}`)
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${editBlogSlug}`)
     const data = await res.json();
     const blog = data?.data;
     return (

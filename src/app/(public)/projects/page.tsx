@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const ProjectsPage = async () => {
-    const res = await fetch(`${baseUrl}/project`, {
+    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
         next: {
             tags: ["projects"]
         }
