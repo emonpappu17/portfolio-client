@@ -20,15 +20,35 @@ export interface IAbout {
     bio: string;
     image: string;
     skills: string[];
-    whatILove?: string;
+    whatILove?: string | null;
     email: string;
     phone: string;
     location: string;
     github: string;
     linkedin: string;
+    education: Education[];
+    experiences: Experience[];
     createdAt: string;
     updatedAt: string;
 }
+
+export interface Education {
+    degree: string;
+    institution: string;
+    startYear?: number;
+    endYear?: number;
+    gpa?: string;
+    description?: string;
+}
+
+export interface Experience {
+    title: string;
+    organization: string;
+    startYear?: number;
+    endYear?: number | null;
+    description?: string;
+}
+
 
 
 export interface IAuthor {

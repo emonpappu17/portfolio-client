@@ -19,7 +19,7 @@ export default function GlobalError({
     }, [error]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 px-4">
+        <div className="flex min-h-screen items-center justify-center px-4">
             <Card className="flex max-w-md flex-col items-center gap-6 p-8 text-center">
                 {/* Alert */}
                 <Alert className="mb-6 border border-destructive/30 bg-destructive/10 text-destructive dark:border-destructive/40 dark:bg-destructive/20">

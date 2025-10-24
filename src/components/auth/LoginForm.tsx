@@ -74,7 +74,7 @@ export default function LoginForm() {
             <Card className="w-[350px] shadow-sm bg-card/40">
                 <CardHeader className="text-center">
                     <Logo />
-                    <CardTitle className="mt-4 text-xl">Admin Login</CardTitle>
+                    <CardTitle className="mt-4 text-xl">Owner Login</CardTitle>
                     <CardDescription>
                         Enter your credentials to access the dashboard
                     </CardDescription>
