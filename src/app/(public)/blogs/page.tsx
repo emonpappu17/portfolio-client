@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog`, {
         next: {
             tags: ["blogs"]
         }

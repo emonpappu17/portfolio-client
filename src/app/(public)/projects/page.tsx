@@ -1,8 +1,6 @@
 import ProjectCard from '@/components/project/ProjectCard';
-import { baseUrl } from '@/config/baseUrl';
 import { IProject } from '@/types';
 import { Metadata } from 'next';
-import React from 'react';
 
 export const metadata: Metadata = {
     title: "My Projects | EmonDev",
@@ -10,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const ProjectsPage = async () => {
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project`, {
         next: {
             tags: ["projects"]
         }
@@ -18,7 +16,6 @@ const ProjectsPage = async () => {
     if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Projects not found</p>;;
     const data = await res.json();
     const projects = data?.data as IProject[]
-    // console.log(projects);
     return (
         <main>
             <div className='max-w-6xl mx-auto mt-20 mb-20 px-5'>

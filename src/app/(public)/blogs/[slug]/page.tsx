@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BlogDetail from '@/components/blog/BlogDetail';
-import { baseUrl } from '@/config/baseUrl';
 import { Metadata } from 'next';
 
 export const generateStaticParams = async () => {
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog`, {
         next: {
             tags: ["blogs"]
         }
     })
     if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();
-
-    console.log({ data });
 
     return data?.data?.data?.map((blog: any) => (
         { slug: blog.slug }
@@ -26,7 +23,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
     const { slug } = await params;
 
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${slug}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog/${slug}`, {
         next: { revalidate: 60 },
     });
 
@@ -75,7 +72,7 @@ const BlogDetailsPage = async ({
     params: Promise<{ slug: string }>
 }) => {
     const { slug } = await params;
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${slug}`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog/${slug}`)
 
     if (!res.ok) return <p className='py-20 text-center text-3xl font-bold '>Blog not found</p>;
     const data = await res.json();

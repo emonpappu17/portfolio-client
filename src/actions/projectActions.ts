@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
-import { baseUrl } from "@/config/baseUrl";
 import { IProject } from "@/types";
-import { cookies } from "next/headers";
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 
 //  Helper to get token safely
 const getToken = async () => {
@@ -16,10 +15,9 @@ const getToken = async () => {
 //  CREATE Project
 export const createProjectAction = async (data: IProject) => {
     const token = await getToken();
-    // console.log('createProjectAction hit');
 
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -33,7 +31,7 @@ export const createProjectAction = async (data: IProject) => {
         if (!res.ok || !resData.success) {
             return { success: false, message: resData.message || "Failed to create project" };
         }
-        // console.log('resData:', resData);
+
         revalidateTag("projects"); // optional
         return { success: true, data: resData.data, message: "Project created successfully" };
     } catch (error) {
@@ -45,7 +43,7 @@ export const createProjectAction = async (data: IProject) => {
 export const updateProjectAction = async (id: string, data: Partial<IProject>) => {
     const token = await getToken();
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -72,7 +70,7 @@ export const deleteProjectAction = async (id: string) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project/${id}`, {
             method: "DELETE",
             headers: {
                 Cookie: `accessToken=${token}`,

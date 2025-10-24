@@ -2,7 +2,6 @@
 import ProjectList from '@/components/project/ProjectList';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { baseUrl } from '@/config/baseUrl';
 import { IProject } from '@/types';
 import { FolderClosedIcon, Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -18,7 +17,7 @@ import {
 
 const getAllProject = async () => {
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project`, {
             cache: "no-store"
         })
 

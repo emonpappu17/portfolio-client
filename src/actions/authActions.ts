@@ -12,7 +12,7 @@ const getToken = async () => {
 
 export const login = async (values: any) => {
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/auth/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const getProfile = async () => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/user/me`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/me`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export const getProfile = async () => {
 
 export const logout = async () => {
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/auth/logout`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +88,6 @@ export const logout = async () => {
 
         return { success: true, data: resData.data, message: "Logout successfully" };
     } catch (error) {
-        // console.log("logout error==>", error);
         return { success: false, message: "Something went wrong while logout" };
     }
 };

@@ -1,8 +1,7 @@
-import { baseUrl } from "@/config/baseUrl";
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://portfolio-server-fawn-tau.vercel.app/api",
+    baseURL: "${process.env.NEXT_PUBLIC_BASE_API}",
     withCredentials: true,
     headers: {
         "Content-Type": "application/json"

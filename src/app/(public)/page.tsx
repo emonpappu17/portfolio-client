@@ -1,10 +1,8 @@
 import About from '@/components/home/About';
 import Contact from '@/components/home/Contact';
 import Hero from '@/components/home/Hero';
-import { baseUrl } from '@/config/baseUrl';
 import { IAbout } from '@/types';
 import { Metadata } from 'next';
-import React from 'react';
 
 export const metadata: Metadata = {
   title: "EmonDev | Full-Stack Web Developer",
@@ -17,7 +15,7 @@ export const metadata: Metadata = {
 
 
 const HomePage = async () => {
-  const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/about`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/about`, {
     cache: "force-cache"
   })
   const data = await res.json();

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import DashboardHome from "@/components/dashboardHome/DashboardHome";
-import { baseUrl } from "@/config/baseUrl";
-import { IDashboardOverview } from "@/types";
 import { cookies } from "next/headers";
 
 const getToken = async () => {
@@ -13,7 +11,7 @@ const getToken = async () => {
 const getOverview = async () => {
     const token = await getToken();
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/overview`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/overview`, {
             cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
@@ -32,7 +30,7 @@ const getOverview = async () => {
 
 const DashboardHomePage = async () => {
     const overflow = await getOverview();
-    // console.log(overflow);
+
     return (
         <main>
             <div className="max-w-7xl mx-auto px-4 py-10">

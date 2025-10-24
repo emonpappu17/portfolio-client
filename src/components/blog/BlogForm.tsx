@@ -64,8 +64,6 @@ const BlogForm = ({ blog }: BlogFormProps) => {
         },
     });
 
-    // console.log(form.formState.errors.content);
-
     const handleFormSubmit = async (values: BlogInput) => {
         setIsSubmitting(true);
         try {

@@ -1,6 +1,4 @@
 import ProjectForm from '@/components/project/ProjectForm';
-import { baseUrl } from '@/config/baseUrl';
-import React from 'react';
 
 const EditProjectPage = async ({
     params,
@@ -8,7 +6,7 @@ const EditProjectPage = async ({
     params: Promise<{ editProjectId: string }>
 }) => {
     const { editProjectId } = await params;
-    const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/project/${editProjectId}`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/project/${editProjectId}`)
     const data = await res.json();
     const project = data.data;
     return (

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
-import { baseUrl } from "@/config/baseUrl";
 import { IBlog } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
@@ -17,10 +16,8 @@ const getToken = async () => {
 export const createBlogAction = async (data: IBlog) => {
     const token = await getToken();
 
-    console.log({ token });
-
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -34,7 +31,6 @@ export const createBlogAction = async (data: IBlog) => {
         if (!res.ok || !resData.success) {
             return { success: false, message: resData.message || "Failed to create blog" };
         }
-        // console.log('resData:', resData);
         revalidateTag("blogs"); // optional
         return { success: true, data: resData.data, message: "Blog created successfully" };
     } catch (error) {
@@ -47,7 +43,7 @@ export const updateBlogAction = async (slug: string, data: Partial<IBlog>) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${slug}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog/${slug}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +70,7 @@ export const deleteBlogAction = async (id: string) => {
     const token = await getToken();
 
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog/${id}`, {
             method: "DELETE",
             headers: {
                 Cookie: `accessToken=${token}`,

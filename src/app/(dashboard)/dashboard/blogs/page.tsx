@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BlogList from "@/components/blog/BlogList";
 import { Button } from "@/components/ui/button";
-import { FolderClosedIcon, Plus } from "lucide-react";
-import Link from "next/link";
 import {
     Card,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { baseUrl } from "@/config/baseUrl";
-import { IBlog } from "@/types";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { IBlog } from "@/types";
+import { FolderClosedIcon, Plus } from "lucide-react";
+import Link from "next/link";
 
 const getAllBlog = async () => {
     try {
-        const res = await fetch(`https://portfolio-server-fawn-tau.vercel.app/api/blog`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog`, {
             cache: "no-store"
         })
 
@@ -23,8 +22,6 @@ const getAllBlog = async () => {
         const data = await res.json();
 
         const blogs = data?.data?.data
-
-        // console.log('blogs:==>', blogs);
 
         return blogs as IBlog[]
     } catch (error) {
